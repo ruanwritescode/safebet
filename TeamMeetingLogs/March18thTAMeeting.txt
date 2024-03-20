@@ -1,0 +1,21 @@
+Have we decided on an API?
+	We mostly have, has 500 pings a month and we can test it live if we 
+    Odds API
+    Look for socket connection to get data via Sockets instead of API calls
+    Finalize API this week
+
+Features
+    Started Wire frames
+
+    Odds Prediction Page
+    Help Line (Talk with an expert)
+        Admins must have a seperate registration and privliages 
+        Ability to remove teams from betting pool
+        Things a normal user might not have access to
+    Ability to track user bets (Previous Bets page)
+
+Meeting this week on tuesday?
+    Discuss about terminology so everyone is on the same page
+    Finalize API
+    Finish deliverables by friday
+    Lab 10 will over 
