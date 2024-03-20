@@ -4,3 +4,15 @@ Individual user accounts will record an input of previous/current bets and sugge
 
 Users will also have the opportunity to communicate with customer service agents via a help page that offers “live” support. This feature will function essentially as a chat service that records previous conversations and allows interaction between two accounts (one client, and one SafeBet team member) This page should also include a suggestion box for bug fixes, feature requests, or help fill in missing data like new offers or incorrect odds.
 Additional pages on the web app include login, register, welcome pages, an about page, a user profile page, a user betting history and a main function page for viewing recommended bets.
+
+Meet the team who developed this project: Ruan Abarbanel, Rohan Adepu, Joshua Gildred, Chasen Goren, Robiel Kennedy, Aaron Van.
+
+For this project we used this list of websites and services... (work in progress)
+
+In order to run this app you will need to download... (wip)
+
+Step one of setting up the app... (wip)
+
+To run a test on the program you must.. (wip)
+
+Here is the fully built app - htpps://demolink.com
