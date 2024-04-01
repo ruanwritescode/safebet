@@ -1,0 +1,30 @@
+<div class="container">
+    <p>
+        {{user_name}}<br>
+        {{email}}<br>
+        {{member_since}}
+    </p>
+</div>
+
+<div class="container">
+    <h2>Bet History</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sport</th>
+                <th>Game</th>
+                <th>Bet Amount</th>
+            </tr>
+        </thead>
+        <tbody> 
+            {{!-- Edit loop after data model is created--}}
+            {{#each}}
+            <tr>
+                <td>{{sport}}</td>
+                <td>{{game}}</td>
+                <td>{{bet_amount}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
