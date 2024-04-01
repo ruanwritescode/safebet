@@ -19,8 +19,7 @@ CREATE TABLE events (
     odds_f INT NOT NULL,
     odds_n INT NOT NULL,
     outome_f BOOLEAN, 
-    PRIMARY KEY(bet_id),
-    FOREIGN KEY(game_id) REFERENCES eventTable(game_id)
+    PRIMARY KEY(bet_id)
 );
 
 IF NOT EXISTS bets
