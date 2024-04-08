@@ -1,0 +1,9 @@
+Discussed member progress on first round of sprints. 
+
+Database create.sql finished
+
+Profile page main layout created (waiting for database finalization for details. needs backend)
+
+Nav bar and footer taken from previous assignments. Adding our own style and touches
+
+worked together to create dummy insert.sql file for testing purposes
