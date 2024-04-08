@@ -223,6 +223,8 @@ app.get('/logout', (req, res) => {
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
+
+// Handlebar helper for conditional statements for partials
 Handlebars.registerHelper( "when",function(operand_1, operator, operand_2, options) {
   var operators = {
    'eq': function(l,r) { return l == r; },
