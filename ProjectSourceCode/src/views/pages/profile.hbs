@@ -1,8 +1,8 @@
 <div class="container">
     <p>
-        {{user_name}}<br>
+        {{username}}<br>
         {{email}}<br>
-        {{member_since}}
+        {{register_date}}
     </p>
 </div>
 
@@ -21,7 +21,8 @@
             {{#each}}
             <tr>
                 <td>{{sport}}</td>
-                <td>{{game}}</td>
+                <td>{{team_f}} vs {{team_n}} on {{event_date}}</td>
+                <td>{{outome_f}}</td>
                 <td>{{bet_amount}}</td>
                 <td>{{winnings}}</td>
             </tr>
