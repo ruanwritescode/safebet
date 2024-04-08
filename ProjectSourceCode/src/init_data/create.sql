@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS events (
     team_f VARCHAR(24) NOT NULL,
     team_n VARCHAR(24) NOT NULL,
     event_date TIMESTAMP NOT NULL,
-    outome_f BOOLEAN, 
+    outcome_f BOOLEAN, 
     PRIMARY KEY(event_id)
 );
 
