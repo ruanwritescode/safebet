@@ -8,7 +8,7 @@ CREATE TABLE users (
     email VARCHAR(24) NOT NULL,
     birth_date DATE,
     register_date DATE,
-    PRIMARY KEY (userID)
+    PRIMARY KEY (user_id)
 );
 
 IF NOT EXISTS events
@@ -18,7 +18,7 @@ CREATE TABLE events (
     team_n VARCHAR(24) NOT NULL,
     event_date DATETIME NOT NULL,
     outome_f BOOLEAN, 
-    PRIMARY KEY(bet_id),
+    PRIMARY KEY(event_id)
 );
 
 IF NOT EXISTS sportsbooks
@@ -27,6 +27,16 @@ CREATE TABLE sportsbooks (
     name VARCHAR(32) NOT NULL,
     url VARCHAR(200),
     PRIMARY KEY(sportsbook_id)
+);
+
+IF NOT EXISTS deals
+CREATE TABLE deals (
+    deal_id INT NOT NULL AUTO_INCREMENT,
+    sportsbook_id INT NOT NULL,
+    type VARCHAR(24) NOT NULL,
+    amount DECIMAL(15,2),
+    PRIMARY KEY(deal_id),
+    FOREIGN KEY (sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
 );
 
 IF NOT EXISTS odds
@@ -38,13 +48,12 @@ CREATE TABLE odds (
     PRIMARY KEY(sportsbook_id, event_id),
     FOREIGN KEY(sportsbook_id) REFERENCES sportsbooks(sportsbook_id),
     FOREIGN KEY(event_id) REFERENCES events(event_id)
-)
-
+);
 
 IF NOT EXISTS bets
 CREATE TABLE bets (
     bet_id INT NOT NULL AUTO_INCREMENT,
-    event_id INT NOT NULL,
+    event_id VARCHAR(32) NOT NULL,
     bet_value DECIMAL(15,2) NOT NULL,
     winnings DECIMAL(15,2),
     deal_id INT NOT NULL,
@@ -60,13 +69,4 @@ CREATE TABLE userHistory (
     PRIMARY KEY(user_id, bet_id),
     FOREIGN KEY(user_id) REFERENCES users(user_id),
     FOREIGN KEY(bet_id) REFERENCES bets(bet_id)
-);
-
-IF NOT EXISTS deals
-CREATE TABLE deals (
-    deal_id INT NOT NULL AUTO_INCREMENT,
-    sportsbook_id INT NOT NULL,
-    type VARCHAR(24) NOT NULL,
-    amount DECIMAL(15,2),
-    FOREIGN KEY (sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
 );
