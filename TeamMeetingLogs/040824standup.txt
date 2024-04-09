@@ -1,0 +1,12 @@
+Went over what we were working on in the past week. 
+
+Targets
+    Fix all errors and make sure the main is error free
+    During meeting make sure everyone has a task    
+        Figure out API integration
+        Fixing Front-end and Back-end 
+        Fix Database issues
+
+Blockers
+    Main Branch errors
+    
