@@ -1,66 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
-        <style>
-            body, html {
-                font-family: Arial;
-            }
-            main {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            form > div {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-            form input {
-                width: 150%;
-                padding: 8px;
-                margin-top: 5px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-            }
-            form button {
-                width: 30%;
-                padding: 8px;
-                background-color: #007bff; 
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                margin-top: 5px;
-            }
-            form button:hover {
-                background-color: #0056b3;
-            }
-        </style>
-    </head>
-
-    <body>
-        <main>
-            <section>
-                <h1>Register</h1>
-                <form action="/register" method="POST">
-                <div>
-                    <label for="username">Create Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div>
-                    <label for="password">Create Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div>
-                    <button type="submit">Register</button>
-                </div>
-                <div>
-                    <p>Already have an account?<a href="/login">Login</a></p>
-                </div>
-                </form>
-            </section>
-        </main>
-    </body>
-</html>
+<style>
+    body, html {
+    font-family: Arial;
+}
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form > div {
+    width: 50%;
+    margin-bottom: 5px;
+}
+form input {
+    width: 150%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+form button {
+    width: 30%;
+    padding: 8px;
+    background-color: #007bff;
+    /* background-color: green; */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+form button:hover {
+    background-color: #0056b3;
+}
+</style>
+<div class="container w-20">
+        <h1>Register</h1>
+        <form action="/register" method="POST">
+        <div>
+            <label for="username">Create Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Create Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <button type="submit">Register</button>
+        </div>
+        <div>
+            <p>Already have an account?<a href="/login">Login</a></p>
+        </div>
+        </form>
+</div>
