@@ -1,37 +1,38 @@
+CREATE DATABASE safebet_db;
+
 CREATE TABLE IF NOT EXISTS users (
-    user_id int NOT NULL AUTO_INCREMENT,
+    user_id SERIAL PRIMARY KEY,
     username VARCHAR(16) NOT NULL,
     password VARCHAR(24) NOT NULL,
     first_name VARCHAR(24),
     last_name VARCHAR(24),
     email VARCHAR(24) NOT NULL,
     birth_date DATE,
-    register_date DATE,
-    PRIMARY KEY (user_id)
+    register_date DATE
+    -- PRIMARY KEY (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS events (
     event_id VARCHAR(32) NOT NULL,
     team_f VARCHAR(24) NOT NULL,
     team_n VARCHAR(24) NOT NULL,
-    event_date DATETIME NOT NULL,
-    outome_f BOOLEAN, 
+    event_date TIMESTAMP NOT NULL,
+    outcome_f BOOLEAN, 
     PRIMARY KEY(event_id)
 );
 
 CREATE TABLE IF NOT EXISTS sportsbooks (
-    sportsbook_id INT NOT NULL AUTO_INCREMENT,
+    sportsbook_id SERIAL PRIMARY KEY,
     name VARCHAR(32) NOT NULL,
-    url VARCHAR(200),
-    PRIMARY KEY(sportsbook_id)
+    url VARCHAR(200)
 );
 
 CREATE TABLE IF NOT EXISTS deals (
-    deal_id INT NOT NULL AUTO_INCREMENT,
+    deal_id SERIAL PRIMARY KEY,
     sportsbook_id INT NOT NULL,
     type VARCHAR(24) NOT NULL,
     amount DECIMAL(15,2),
-    PRIMARY KEY(deal_id),
+    -- PRIMARY KEY(deal_id),
     FOREIGN KEY (sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
 );
 
@@ -46,12 +47,12 @@ CREATE TABLE IF NOT EXISTS odds (
 );
 
 CREATE TABLE IF NOT EXISTS bets (
-    bet_id INT NOT NULL AUTO_INCREMENT,
+    bet_id SERIAL PRIMARY KEY,
     event_id VARCHAR(32) NOT NULL,
     bet_value DECIMAL(15,2) NOT NULL,
     winnings DECIMAL(15,2),
     deal_id INT NOT NULL,
-    PRIMARY KEY(bet_id),
+    -- PRIMARY KEY(bet_id),
     FOREIGN KEY(event_id) REFERENCES events(event_id),
     FOREIGN KEY(deal_id) REFERENCES deals(deal_id)
 );

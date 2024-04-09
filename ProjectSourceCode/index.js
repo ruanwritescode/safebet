@@ -11,7 +11,7 @@ const pgp = require('pg-promise')(); // To connect to the Postgres DB from the n
 const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
-const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+// const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -223,6 +223,8 @@ app.get('/logout', (req, res) => {
 app.listen(3000);
 console.log('Server is listening on port 3000');
 
+
+// Handlebar helper for conditional statements for partials
 Handlebars.registerHelper( "when",function(operand_1, operator, operand_2, options) {
   var operators = {
    'eq': function(l,r) { return l == r; },
