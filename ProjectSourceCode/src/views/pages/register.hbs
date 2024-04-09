@@ -1,41 +1,7 @@
-<style>
-    body, html {
-    font-family: Arial;
-}
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-form > div {
-    width: 50%;
-    margin-bottom: 5px;
-}
-form input {
-    width: 150%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-form button {
-    width: 30%;
-    padding: 8px;
-    background-color: #007bff;
-    /* background-color: green; */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 5px;
-}
-form button:hover {
-    background-color: #0056b3;
-}
-</style>
-<div class="container w-20">
+{{message}}
+<div class="container">
         <h1>Register</h1>
-        <form action="/register" method="POST">
+        <form action="/register" type="submit" method="POST">
         <div>
             <label for="username">Create Username</label>
             <input type="text" id="username" name="username" required>
@@ -43,6 +9,22 @@ form button:hover {
         <div>
             <label for="password">Create Password</label>
             <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="last_name">
+        </div>
+        <div>
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email">
+        </div>
+        <div>
+            <label for="birth_date">Birth date</label>
+            <input type="date" id="birth_date" name="birth_date">
         </div>
         <div>
             <button type="submit">Register</button>
