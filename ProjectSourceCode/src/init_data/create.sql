@@ -1,4 +1,4 @@
-CREATE DATABASE safebet_db;
+-- CREATE DATABASE safebet_db;
 
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
