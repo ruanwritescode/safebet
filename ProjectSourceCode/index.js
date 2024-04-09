@@ -20,8 +20,8 @@ const bcrypt = require('bcrypt'); //  To hash passwords
 // create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
   extname: 'hbs',
-  layoutsDir: __dirname + 'src/views/layouts',
-  partialsDir: __dirname + 'src/views/partials',
+  layoutsDir: __dirname + '/src/views/layouts',
+  partialsDir: __dirname + '/src/views/partials',
 });
 
 // database configuration
@@ -52,8 +52,9 @@ db.connect()
 // Register `hbs` as our view engine using its bound `engine()` function.
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'src/views'));
+app.set('views', path.join(__dirname, '/src/views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+app.use(express.static(__dirname + 'src/resources/css'));
 
 // initialize session variables
 app.use(
@@ -74,14 +75,19 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
-// const user = {
-//   username: undefined,
-//   password: undefined,
-// };
+const user = {
+  username: undefined,
+  password: undefined,
+  email: undefined,
+  first_name: undefined,
+  last_name: undefined,
+  birth_date: undefined,
+  register_date: undefined,
+  age: undefined,
+};
 
-// TODO - Include your API routes here
 app.get('/', (req, res) => {
-    res.redirect('/register') //this will call the /anotherRoute route in the API
+    res.redirect('/register') //this will call the /register route in the API
 });
 
 // ------------------- ROUTES for register.hbs ------------------- //
@@ -99,13 +105,13 @@ app.post('/register', async (req, res) => {
     const email = req.body.email;
     const birth_date = req.body.birth_date;
     const register_date = new Date().toJSON().slice(0, 10);
-    let age = register_date - birth_date;
-
-    if (age.getFullYear() < 21) {
-        err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
-        console.log(err);
-        res.redirect('/')
-    };
+    // let age = register_date - birth_date;
+    // console.log(age)
+    // if (age.getFullYear() < 21) {
+    //     err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
+    //     console.log(err);
+    //     res.redirect('/')
+    // };
     // To-DO: Insert username and hashed password into the 'users' table
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
 
@@ -141,19 +147,27 @@ app.post('/register', async (req, res) => {
     var message = `UNKNOWN ERROR!`;
 
     try {
-      const user = await db.oneOrNone(query,username);
+      const data = await db.oneOrNone(query,username);
       console.log(user);
-      if(!user) {
+      if(!data) {
         res.redirect('/register');
       }
-      const match = await bcrypt.compare(password, user.password);
+      const match = await bcrypt.compare(password, data.password);
       if(!match) {
         message = `Incorrect Password for "${username}"`;
         throw new Error(message);
       } 
+      user.username = username;
+      user.first_name = data.first_name;
+      user.last_name = data.last_name;
+      user.email = data.email;
+      user.birth_date = data.birth_date;
+      user.register_date = data.register_date;
+      user.age = (register_date - birth_date).getFullYear();
+
       req.session.user = user;
       req.session.save();
-      res.redirect('/discover')
+      res.redirect('/home')
     }
     catch (err) {
       res.render('pages/login', {
@@ -207,6 +221,21 @@ app.use(auth);
 //       });
 //     });
 // });  
+
+// ------------------- ROUTES for profile.hbs ------------------- //
+// GET
+app.get('/profile', (req, res) => {
+  res.render('pages/profile');
+});
+
+
+// ------------------- ROUTES for help.hbs ------------------- //
+
+// ------------------- ROUTES for about.hbs ------------------- //
+// GET
+app.get('/about', (req, res) => {
+  res.render('pages/about');
+});
 
 // ------------------- ROUTES for logout.hbs ------------------- //
 app.get('/logout', (req, res) => {
