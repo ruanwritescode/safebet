@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container">
     <h1>Welcome to SafeBets</h1>
     <div class="active-deal">
@@ -21,3 +22,28 @@
         </ul>
     </div>
 </div>
+=======
+        <div class="container">
+        <h1>Welcome to SafeBets</h1>
+        <div class="active-deal">
+            <h2>Active Deal</h2>
+            <form action="/place_bet" method="POST">
+                <label for="betAmount">Enter Active Deal:</label>
+                <input type="number" id="betAmount" name="betAmount" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        
+        <div class="current-odds">
+            <h2>Current Eligible Odds</h2>
+            <ul>
+                {{!#each bets}}
+                <li>
+                    <span>{{!sport}}</span>
+                    <span> - {{!winnings}}</span>
+                </li>
+                {{!/each}}
+            </ul>
+        </div>
+    </div>
+>>>>>>> origin

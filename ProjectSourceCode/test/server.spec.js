@@ -96,3 +96,36 @@ describe('Registration', () => {
       });
     });
 });
+
+
+// ********************** PART C 2 Unit Testcases *******************************
+// Part C
+// These tests attempts to place a bet using an invalid deal ID, which does not exist in the deals table.
+describe('Testing Place Bet API', () => {
+  
+  // Positive test case for sucessfully placing a valid and existing bet pulled from the api
+  it('Positive: Successfully place a bet', done => {
+    chai
+      .request(server)
+      .post('/place_bet')
+      .send({ user_id: 1, event_id: 'EVT123', bet_value: 100.00, deal_id: 2 })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equal('Bet placed successfully');
+        done();
+      });
+  });
+  
+  // Negative test case for attemptting an invaild bet (Bet that doesn't exsist)
+  it('Negative: Attempt to place bet with invalid deal ID', done => {
+    chai
+      .request(server)
+      .post('/place_bet')
+      .send({ user_id: 1, event_id: 'EVT123', bet_value: 100.00, deal_id: 999 }) // Invalid deal_id
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equal('Invalid deal ID');
+        done();
+      });
+  });
+});
