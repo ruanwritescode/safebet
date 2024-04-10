@@ -14,11 +14,18 @@
       <div class="collapse navbar-collapse" id="navbar-collapse">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link" href='../pages/home.hbs'>Home</a>
+            <a class="nav-link" href='/home'>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href='/about'>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href='/help'>Help</a>
           </li>
         </ul>
         <div class="nav-item me-1">
-            <a class="nav-link" href='../pages/logout.hbs'>Logout</a>
+          {{!-- make profile button a drop down menu. link to profile and link to logout --}}
+            <a class="nav-link" href='/profile'>Profile</a>
         </div>
       </div>
     </div>
