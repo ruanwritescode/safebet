@@ -56,7 +56,7 @@ describe('Registration', () => {
   });
 
 // CASE 2: User is 18
-  it('Allows registration for users who are exactly 18 years old of age', done => {
+  it('Accepts registration for users who are exactly 18 years old of age', done => {
     const today = new Date();
     const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
     chai
