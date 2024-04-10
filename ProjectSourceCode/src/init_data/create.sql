@@ -4,10 +4,10 @@ CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(16) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    first_name VARCHAR(24),
-    last_name VARCHAR(24),
-    email VARCHAR(24),
-    birth_date DATE,
+    first_name VARCHAR(24) NOT NULL,
+    last_name VARCHAR(24) NOT NULL,
+    email VARCHAR(24) NOT NULL,
+    birth_date DATE NOT NULL,
     register_date DATE
     -- PRIMARY KEY (user_id)
 );
