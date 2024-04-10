@@ -168,7 +168,7 @@ app.post('/register', async (req, res) => {
 
       req.session.user = user;
       req.session.save();
-      res.redirect('pages/home')
+      res.redirect('/home')
     }
     catch (err) {
       res.render('pages/login', {
@@ -192,7 +192,9 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
-
+app.get('/home', (req,res) => {
+  res.render('pages/home')
+});
 // EXAMPLE FROM AXIOS TICKETMASTER API CALL
 // app.get('/discover', (req, res) => {
 //   axios({
@@ -239,6 +241,10 @@ app.get('/profile', (req, res) => {
 });
 
 // ------------------- ROUTES for help.hbs ------------------- //
+// GET
+app.get('/help', (req, res) => {
+  res.render('pages/help');
+});
 
 // ------------------- ROUTES for about.hbs ------------------- //
 // GET
