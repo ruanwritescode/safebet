@@ -148,7 +148,6 @@ app.post('/register', async (req, res) => {
 
     try {
       const data = await db.oneOrNone(query,username);
-      console.log(user);
       if(!data) {
         res.redirect('/register');
       }
@@ -157,13 +156,15 @@ app.post('/register', async (req, res) => {
         message = `Incorrect Password for "${username}"`;
         throw new Error(message);
       } 
-      user.username = username;
+      user.username = data.username;
+      user.password = bcrypt.hash(data.password, 10);
       user.first_name = data.first_name;
       user.last_name = data.last_name;
       user.email = data.email;
       user.birth_date = data.birth_date;
       user.register_date = data.register_date;
-      user.age = (register_date - birth_date).getFullYear();
+      // user.age = (register_date - birth_date).getFullYear();
+      console.log(user);
 
       req.session.user = user;
       req.session.save();
@@ -191,7 +192,9 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
-
+app.get('/home', (req,res) => {
+  res.render('pages/home')
+});
 // EXAMPLE FROM AXIOS TICKETMASTER API CALL
 // app.get('/discover', (req, res) => {
 //   axios({
@@ -230,6 +233,10 @@ app.get('/profile', (req, res) => {
 
 
 // ------------------- ROUTES for help.hbs ------------------- //
+// GET
+app.get('/help', (req, res) => {
+  res.render('pages/help');
+});
 
 // ------------------- ROUTES for about.hbs ------------------- //
 // GET
