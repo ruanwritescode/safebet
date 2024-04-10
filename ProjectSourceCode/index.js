@@ -168,7 +168,7 @@ app.post('/register', async (req, res) => {
 
       req.session.user = user;
       req.session.save();
-      res.redirect('pages/home')
+      res.redirect('/home')
     }
     catch (err) {
       res.render('pages/login', {
@@ -231,6 +231,10 @@ app.get('/profile', (req, res) => {
 
 
 // ------------------- ROUTES for help.hbs ------------------- //
+// GET
+app.get('/help', (req, res) => {
+  res.render('pages/help');
+});
 
 // ------------------- ROUTES for about.hbs ------------------- //
 // GET
