@@ -224,9 +224,7 @@ app.get('/home', (req,res) => {
 //       });
 //     });
 // });  
-app.get('/home', (req, res) => {
-  res.render('pages/home');
-})
+
 
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
