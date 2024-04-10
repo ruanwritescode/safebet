@@ -161,9 +161,11 @@ app.post('/register', async (req, res) => {
       user.first_name = data.first_name;
       user.last_name = data.last_name;
       user.email = data.email;
-      user.birth_date = data.birth_date;
-      user.register_date = data.register_date;
-      // user.age = (register_date - birth_date).getFullYear();
+      let birth_date = new Date(data.birth_date)
+      user.birth_date = birth_date;
+      let reg_date = new Date(data.register_date);
+      user.register_date = reg_date;
+      user.age = (reg_date.getFullYear() - birth_date.getFullYear());
       console.log(user);
 
       req.session.user = user;
