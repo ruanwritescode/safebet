@@ -163,11 +163,11 @@ app.post('/register', async (req, res) => {
       user.email = data.email;
       user.birth_date = data.birth_date;
       user.register_date = data.register_date;
-      user.age = (register_date - birth_date).getFullYear();
+      // user.age = (register_date - birth_date).getFullYear();
 
       req.session.user = user;
       req.session.save();
-      res.redirect('/home')
+      res.redirect('pages/home')
     }
     catch (err) {
       res.render('pages/login', {
