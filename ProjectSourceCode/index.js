@@ -192,7 +192,9 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
-
+app.get('/home', (req,res) => {
+  res.render('pages/home')
+});
 // EXAMPLE FROM AXIOS TICKETMASTER API CALL
 // app.get('/discover', (req, res) => {
 //   axios({
