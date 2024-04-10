@@ -222,13 +222,21 @@ app.use(auth);
 //       });
 //     });
 // });  
+app.get('/home', (req, res) => {
+  res.render('pages/home');
+})
 
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
 app.get('/profile', (req, res) => {
-  res.render('pages/profile');
+  res.render('pages/profile', {
+    username: req.session.user.username,
+    first_name: req.session.user.first_name,
+    last_name: req.session.user.last_name,
+    email: req.session.user.email,
+    register_date: req.session.user.register_date
+  });
 });
-
 
 // ------------------- ROUTES for help.hbs ------------------- //
 
