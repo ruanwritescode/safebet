@@ -14,7 +14,25 @@
     <h1>Help Center</h1>
 </header>
 <main>
-    {{! Main help page}}
+    <div id="chat-box">
+        <div id="chat-messages" class="chat-messages"></div>
+        <textarea id="chat-input" placeholder="Type your message here..."></textarea>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <aside>
+        <h2>Pages</h2>
+        <ul>
+            <li><a href="page1.html">Login</a></li> 
+            <li><a href="page2.html">Home</a></li>
+            <li><a href="page3.html">About</a></li>
+
+
+            {{!-- Implemenation of box w/ sockets --}}
+
+ 
+
+        </ul>
+    </aside>
 </main>
 <script src="script.js"></script>
 </body>
