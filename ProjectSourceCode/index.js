@@ -11,7 +11,7 @@ const pgp = require('pg-promise')(); // To connect to the Postgres DB from the n
 const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
-// const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -201,10 +201,61 @@ app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
 app.get('/home', (req,res) => {
-  res.render('pages/home')
+  let data = JSON.stringify({
+    query: ``,
+    variables: {}
+  });
+  
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://api.the-odds-api.com/v4/sports?api_key=44623dd585af3038f81d628e55b081d4',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    params: {
+      apiKey: process.env.API_KEY,
+    },
+    data : data
+  };
+  
+  axios.request(config)
+  .then((response) => {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  // axios({
+  //   url: `https://api.the-odds-api.com/v4/sports/`,
+  //   method: 'GET',
+  //   dataType: 'json',
+  //   headers: {
+  //     'Accept-Encoding': 'application/json',
+  //   },
+  //   params: {
+  //     apikey: process.env.API_KEY,
+  //   },
+  // })
+  //   .then(results => {
+  //     console.log(results); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
+  //     console.log("success");
+  //     res.render('pages/home', {
+  //       sports: results,
+  //     });
+  //   })
+  //   .catch(error => {
+  //     // Handle errors
+  //     message = "Could Not Find Data";
+  //     res.render('pages/home', {
+  //       results: [],
+  //       error: error,
+  //       message: message,
+  //     });
+  //   });
 });
-// EXAMPLE FROM AXIOS TICKETMASTER API CALL
-// app.get('/discover', (req, res) => {
+
+// app.post('/home', (req, res) => {
 //   axios({
 //     url: ``,
 //     method: 'GET',
@@ -232,9 +283,6 @@ app.get('/home', (req,res) => {
 //       });
 //     });
 // });  
-app.get('/home', (req, res) => {
-  res.render('pages/home');
-})
 
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
