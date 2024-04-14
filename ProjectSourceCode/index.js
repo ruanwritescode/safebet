@@ -103,15 +103,21 @@ app.post('/register', async (req, res) => {
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const email = req.body.email;
-    const birth_date = req.body.birth_date;
+    let birthday = new Date(req.body.birth_date);
+    const birth_date = birthday;
     const register_date = new Date().toJSON().slice(0, 10);
-    // let age = register_date - birth_date;
-    // console.log(age)
-    // if (age.getFullYear() < 21) {
-    //     err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
-    //     console.log(err);
-    //     res.redirect('/')
-    // };
+    let reg_date = new Date(register_date);
+    let age = reg_date.getFullYear() - birthday.getFullYear();
+    console.log(age)
+    if (age< 21) {
+        err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
+        console.log(err);
+        res.render('pages/register', {
+          error: true,
+          message: err,
+        });
+        return;
+    };
     // To-DO: Insert username and hashed password into the 'users' table
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
 
