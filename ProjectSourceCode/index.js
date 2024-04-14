@@ -161,9 +161,11 @@ app.post('/register', async (req, res) => {
       user.first_name = data.first_name;
       user.last_name = data.last_name;
       user.email = data.email;
-      user.birth_date = data.birth_date;
-      user.register_date = data.register_date;
-      // user.age = (register_date - birth_date).getFullYear();
+      let birth_date = new Date(data.birth_date)
+      user.birth_date = birth_date;
+      let reg_date = new Date(data.register_date);
+      user.register_date = reg_date;
+      user.age = (reg_date.getFullYear() - birth_date.getFullYear());
       console.log(user);
 
       req.session.user = user;
@@ -224,13 +226,21 @@ app.get('/home', (req,res) => {
 //       });
 //     });
 // });  
+app.get('/home', (req, res) => {
+  res.render('pages/home');
+})
 
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
 app.get('/profile', (req, res) => {
-  res.render('pages/profile');
+  res.render('pages/profile', {
+    username: req.session.user.username,
+    first_name: req.session.user.first_name,
+    last_name: req.session.user.last_name,
+    email: req.session.user.email,
+    register_date: req.session.user.register_date
+  });
 });
-
 
 // ------------------- ROUTES for help.hbs ------------------- //
 // GET
