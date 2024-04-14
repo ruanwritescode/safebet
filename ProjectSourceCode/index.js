@@ -125,7 +125,7 @@ app.post('/register', async (req, res) => {
         register_date
     ])
         .then(
-            res.redirect('/pages/login')
+            res.redirect('/login')
         )
         .catch(err => {
             console.log(err);
