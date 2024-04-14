@@ -38,7 +38,7 @@
 
     <div class="eligible-bets">
         <h2>Current Eligible Bets</h2>
-        <table>
+        <table class="table">
             {{#each event}}
                 <tr>
                     <th></th>
@@ -52,8 +52,9 @@
                     <td>{{markets.[0].outcomes.[1].price}}</td>
                     <td>
                         <form action="/bets/add" type="submit" method="post">
-                            <input type="hidden" class="form-control" id="add" name="event_id" value={{id}}>
-                            <button id="submit-button" type="submit" class="btn btn-secondary">{{id}}</button>
+                            <input type="hidden" class="form-control" id="event_id" name="event_id" value={{../id}}>
+                            <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value={{key}}>
+                            <button id="submit-button" type="submit" class="btn btn-secondary">SELECT</button>
                         </form>      
                     </td>
                 </tr>
