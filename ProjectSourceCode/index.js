@@ -11,7 +11,7 @@ const pgp = require('pg-promise')(); // To connect to the Postgres DB from the n
 const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
-// const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -103,15 +103,21 @@ app.post('/register', async (req, res) => {
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const email = req.body.email;
-    const birth_date = req.body.birth_date;
+    let birthday = new Date(req.body.birth_date);
+    const birth_date = birthday;
     const register_date = new Date().toJSON().slice(0, 10);
-    // let age = register_date - birth_date;
-    // console.log(age)
-    // if (age.getFullYear() < 21) {
-    //     err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
-    //     console.log(err);
-    //     res.redirect('/')
-    // };
+    let reg_date = new Date(register_date);
+    let age = reg_date.getFullYear() - birthday.getFullYear();
+    console.log(age)
+    if (age< 21) {
+        err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
+        console.log(err);
+        res.render('pages/register', {
+          error: true,
+          message: err,
+        });
+        return;
+    };
     // To-DO: Insert username and hashed password into the 'users' table
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
 
@@ -125,7 +131,7 @@ app.post('/register', async (req, res) => {
         register_date
     ])
         .then(
-            res.redirect('/pages/login')
+            res.redirect('/login')
         )
         .catch(err => {
             console.log(err);
@@ -161,9 +167,11 @@ app.post('/register', async (req, res) => {
       user.first_name = data.first_name;
       user.last_name = data.last_name;
       user.email = data.email;
-      user.birth_date = data.birth_date;
-      user.register_date = data.register_date;
-      // user.age = (register_date - birth_date).getFullYear();
+      let birth_date = new Date(data.birth_date)
+      user.birth_date = birth_date;
+      let reg_date = new Date(data.register_date);
+      user.register_date = reg_date;
+      user.age = (reg_date.getFullYear() - birth_date.getFullYear());
       console.log(user);
 
       req.session.user = user;
@@ -193,10 +201,61 @@ app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
 app.get('/home', (req,res) => {
-  res.render('pages/home')
+  let data = JSON.stringify({
+    query: ``,
+    variables: {}
+  });
+  
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://api.the-odds-api.com/v4/sports?api_key=44623dd585af3038f81d628e55b081d4',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    params: {
+      apiKey: process.env.API_KEY,
+    },
+    data : data
+  };
+  
+  axios.request(config)
+  .then((response) => {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  // axios({
+  //   url: `https://api.the-odds-api.com/v4/sports/`,
+  //   method: 'GET',
+  //   dataType: 'json',
+  //   headers: {
+  //     'Accept-Encoding': 'application/json',
+  //   },
+  //   params: {
+  //     apikey: process.env.API_KEY,
+  //   },
+  // })
+  //   .then(results => {
+  //     console.log(results); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
+  //     console.log("success");
+  //     res.render('pages/home', {
+  //       sports: results,
+  //     });
+  //   })
+  //   .catch(error => {
+  //     // Handle errors
+  //     message = "Could Not Find Data";
+  //     res.render('pages/home', {
+  //       results: [],
+  //       error: error,
+  //       message: message,
+  //     });
+  //   });
 });
-// EXAMPLE FROM AXIOS TICKETMASTER API CALL
-// app.get('/discover', (req, res) => {
+
+// app.post('/home', (req, res) => {
 //   axios({
 //     url: ``,
 //     method: 'GET',
@@ -224,7 +283,6 @@ app.get('/home', (req,res) => {
 //       });
 //     });
 // });  
-
 
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
