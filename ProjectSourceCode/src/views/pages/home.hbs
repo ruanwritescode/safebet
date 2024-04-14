@@ -1,24 +1,58 @@
 {{message}}
-<div class="container">
+<div class="container" id="form">
     <h1>Welcome to SafeBets</h1>
-    <div class="active-deal">
-        <h2>Active Deal</h2>
-        <form action="/place_bet" method="POST">
-            <label for="betAmount">Enter Active Deal:</label>
-            <input type="number" id="betAmount" name="betAmount" required>
-            <button type="submit">Submit</button>
+    <div class="bets-picker" id="form">
+        <form action="/home/odds" type='submit' method="POST">
+            <h2 for="sportsbook">Pick A Sportsbook</h2>
+            <div>
+                <select class="form-select" aria-label="Default select example" id="sportsbook" name="sportsbook">
+                    <option selected disabled>{{#if selection}}{{selection.sportsbook}}{{else}}Sportsbook{{/if}}</option>
+                    {{#each sportsbook}}
+                        <option value={{sportsbook_name}}>{{sportsbook_name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <h2 for="deal">Pick A Deal</h2>
+            <div>
+                <select class="form-select" aria-label="Default select example" id="deal" name="deal">
+                    <option selected disabled>{{#if selection}}{{selection.deal}}{{else}}Deal{{/if}}</option>
+                    {{#each deal}}
+                        <option value={{deal_type}}>{{deal_type}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <h2 for="sport">Pick A Sport</h2>
+            <div>
+                <select class="form-select" aria-label="Default select example" id="sport" name="sport">
+                    <option selected disabled>{{#if selection}}{{selection.sport}}{{else}}Sport{{/if}}</option>
+                    {{#each sport}}
+                        <option value={{sport_key}}>{{sport_name}} {{sport_league}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div>
+                <button type="submit" id="submit-button">Get Bets</button>
+            </div>
         </form>
     </div>
-    
-    <div class="current-odds">
-        <h2>Current Eligible Odds</h2>
-        <ul>
-            {{!#each bets}}
-            <li>
-                <span>{{!sport}}</span>
-                <span> - {{!winnings}}</span>
-            </li>
-            {{!/each}}
-        </ul>
+
+    <div class="eligible-bets">
+        <h2>Current Eligible Bets</h2>
+        <table>
+            {{#each event}}
+                <tr>
+                    <th></th>
+                    <th>{{home_team}}</th>
+                    <th>{{away_team}}</th>
+                </tr>
+                {{#each bookmakers}}
+                <tr>
+                    <td>{{title}}</td>
+                    <td>{{markets.[0].outcomes.[0].price}}</td>
+                    <td>{{markets.[0].outcomes.[1].price}}</td>
+                </tr>
+                {{/each}}
+            {{/each}}
+        </table>
     </div>
-</div>
+{{!-- </div> --}}

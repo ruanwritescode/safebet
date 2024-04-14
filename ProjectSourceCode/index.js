@@ -86,6 +86,12 @@ const user = {
   age: undefined,
 };
 
+const selection = {
+  sportsbook: undefined,
+  deal: undefined,
+  sport: undefined,
+};
+
 app.get('/', (req, res) => {
     res.redirect('/register') //this will call the /register route in the API
 });
@@ -168,9 +174,9 @@ app.post('/register', async (req, res) => {
       user.last_name = data.last_name;
       user.email = data.email;
       let birth_date = new Date(data.birth_date)
-      user.birth_date = birth_date;
+      user.birth_date = birth_date.toJSON().slice(0, 10);
       let reg_date = new Date(data.register_date);
-      user.register_date = reg_date;
+      user.register_date = reg_date.toJSON().slice(0, 10);
       user.age = (reg_date.getFullYear() - birth_date.getFullYear());
       console.log(user);
 
@@ -200,38 +206,40 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
-app.get('/home', (req,res) => {
-  let data = JSON.stringify({
-    query: ``,
-    variables: {}
-  });
-  
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: 'https://api.the-odds-api.com/v4/sports?api_key=44623dd585af3038f81d628e55b081d4',
-    headers: { 
-      'Content-Type': 'application/json'
-    },
-    params: {
-      apiKey: process.env.API_KEY,
-    },
-    data : data
-  };
-  
-  axios.request(config)
-  .then((response) => {
-    console.log(JSON.stringify(response.data));
-  })
-  .catch((error) => {
-    console.log(error);
+app.get('/home', async (req,res) => {
+    const sportsbook_query = 'SELECT * FROM sportsbooks';
+    const deal_query = 'SELECT * FROM deals';
+    const sport_query = 'SELECT * FROM sports';
+    try  {
+      const sportsbooks = await db.manyOrNone(sportsbook_query);
+      const deals = await db.manyOrNone(deal_query);
+      const sports = await db.manyOrNone(sport_query);
+      res.render('pages/home', {
+        sportsbook: sportsbooks,
+        deal: deals,
+        sport: sports,
+        message: req.query.message,
+        selection: selection,
+      })
+    }
+    catch (err) {
+        console.log(err);
+        message = "Bets Data Not Found";
+        res.render('pages/home', {
+          sportsbook: [],
+          deal: [],
+          sport: [],
+          message: message,
+        })
+    };
   });
   // axios({
-  //   url: `https://api.the-odds-api.com/v4/sports/`,
-  //   method: 'GET',
+  //   url: `https://api.the-odds-api.com/v4/sports`,
+  //   method: 'get',
   //   dataType: 'json',
+  //   maxBodyLength: Infinity,
   //   headers: {
-  //     'Accept-Encoding': 'application/json',
+  //     'Content-Type': 'application/json',
   //   },
   //   params: {
   //     apikey: process.env.API_KEY,
@@ -239,9 +247,8 @@ app.get('/home', (req,res) => {
   // })
   //   .then(results => {
   //     console.log(results); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
-  //     console.log("success");
   //     res.render('pages/home', {
-  //       sports: results,
+  //       sport: results,
   //     });
   //   })
   //   .catch(error => {
@@ -253,36 +260,50 @@ app.get('/home', (req,res) => {
   //       message: message,
   //     });
   //   });
-});
 
-// app.post('/home', (req, res) => {
-//   axios({
-//     url: ``,
-//     method: 'GET',
-//     dataType: 'json',
-//     headers: {
-//       'Accept-Encoding': 'application/json',
-//     },
-//     params: {
-//       apikey: process.env.API_KEY,
-//       keyword: 'rock', //you can choose any artist/event here
-//       size: 10 // you can choose the number of events you would like to return
-//     },
-//   })
-//     .then(results => {
-//       console.log(results.data._embedded.events[4]._embedded.venues); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
-//       res.render('pages/discover', {
-//         event: results.data._embedded.events,
-//       });
-//     })
-//     .catch(error => {
-//       // Handle errors
-//       res.render('pages/discover', {
-//         results: [],
-//         error: error,
-//       });
-//     });
-// });  
+app.post('/home/odds', (req, res) => {
+  selection.sportsbook = req.body.sportsbook;
+  selection.deal = req.body.deal;
+  selection.sport = req.body.sport;
+  const selected_url = 'https://api.the-odds-api.com/v4/sports/' + selection.sport + '/odds';
+  // const selected_url = 'https://api.the-odds-api.com/v4/sports?'
+  console.log(selected_url)
+  let data = JSON.stringify({
+    query: ``,
+    variables: {}
+  });
+  
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: selected_url,
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    params: {
+      api_key: process.env.API_KEY,
+      regions: 'us',
+      markets: 'h2h',
+      oddsFormat: 'american',
+    },
+    data : data
+  };
+  
+  axios.request(config)
+  .then((response) => {
+    console.log('Remaining requests',response.headers['x-requests-remaining']);
+    console.log('Used requests',response.headers['x-requests-used']);
+    res.render('pages/home', {
+      event: response.data,
+      selection: selection,
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+    message = "Odds API Failed";
+    res.redirect('/home?message=' + message);
+  });
+});  
 
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
