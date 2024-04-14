@@ -13,6 +13,35 @@ INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
     ('acegae12354ce3a12', 'Chicago White Sox', 'Cleveland Guardians', '2022-04-16', FALSE),
     ('adcf31c235a231ad1', 'Miami Marlins', 'New York Yankees', '2022-05-01', TRUE);
 
+INSERT INTO sports (sport_key, sport_name, sport_league)
+    VALUES
+    ('americanfootball_ncaaf','American Football','NFL'),
+    ('americanfootball_nfl','American Football','NCAAF'),
+    ('basketball_nba','Basketball','NBA'),
+    ('basketball_ncaa','Basketball','NCAA'),
+    ('baseball_mlb','Baseball','MLB'),
+    ('baseball_ncaa','Baseball','NCAA'),
+    ('icehockey_nhl','Ice Hockey','NHL'),
+    ('soccer_usa_mls','Soccer','MLS');
+
+INSERT INTO sportsbooks (sportsbook_name,sportsbook_url)
+    VALUES
+    ('DraftKings','https://sportsbook.draftkings.com/'),
+    ('FanDuel','https://www.fanduel.com/'),
+    ('BetMGM','https://sports.co.betmgm.com/'),
+    ('Caesars','https://www.caesars.com/sportsbook-and-casino'),
+    ('BetRivers','https://co.betrivers.com/'),
+    ('MyBookie.ag','https://www.mybookie.ag'),
+    ('BetUS','https://betusa.online/');
+
+INSERT INTO deals (deal_type)
+    VALUES
+    ('Free Bet'),
+    ('Risk-Free Bet'),
+    ('Bet Credits'),
+    ('One-Off Match Bonus'),
+    ('Deposit Match');
+
 -- INSERT INTO bets (event_id, bet_value, winnings, deal_id)
 --     VALUES
 --     ('adcea12351d134ar1', 123.2, 4123, 1),
@@ -25,7 +54,3 @@ INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
 --     (1,2),
 --     (2,3);
 
--- INSERT INTO deals (type, amount)
---     VALUES
---     ('Free_Bet', 3000),
---     ('Free_Bet', 500);
