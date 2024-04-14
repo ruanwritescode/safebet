@@ -15,8 +15,8 @@ INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
 
 INSERT INTO sports (sport_key, sport_name, sport_league)
     VALUES
-    ('americanfootball_ncaaf','American Football','NFL'),
-    ('americanfootball_nfl','American Football','NCAAF'),
+    ('americanfootball_nfl','American Football','NFL'),
+    ('americanfootball_ncaaf','American Football','NCAAF'),
     ('basketball_nba','Basketball','NBA'),
     ('basketball_ncaa','Basketball','NCAA'),
     ('baseball_mlb','Baseball','MLB'),

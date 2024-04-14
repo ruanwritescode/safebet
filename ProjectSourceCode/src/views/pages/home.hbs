@@ -1,4 +1,4 @@
-{{message}}
+{{> message}}
 <div class="container" id="form">
     <h1>Welcome to SafeBets</h1>
     <div class="bets-picker" id="form">
@@ -6,27 +6,27 @@
             <h2 for="sportsbook">Pick A Sportsbook</h2>
             <div>
                 <select class="form-select" aria-label="Default select example" id="sportsbook" name="sportsbook">
-                    <option selected disabled>{{#if selection}}{{selection.sportsbook}}{{else}}Sportsbook{{/if}}</option>
+                    <option selected disabled value={{selection.sportsbook}}>{{#if selection.sportsbook}}{{selection.sportsbook}}{{else}}Sportsbook{{/if}}</option>
                     {{#each sportsbook}}
-                        <option value={{sportsbook_name}}>{{sportsbook_name}}</option>
+                        <option value={{#if selection.sportsbook}}{{selection.sportsbook}}{{else}}{{sportsbook_name}}{{/if}}>{{sportsbook_name}}</option>
                     {{/each}}
                 </select>
             </div>
             <h2 for="deal">Pick A Deal</h2>
             <div>
                 <select class="form-select" aria-label="Default select example" id="deal" name="deal">
-                    <option selected disabled>{{#if selection}}{{selection.deal}}{{else}}Deal{{/if}}</option>
+                    <option selected disabled value={{selection.deal}}>{{#if selection.deal}}{{selection.deal}}{{else}}Deal{{/if}}</option>
                     {{#each deal}}
-                        <option value={{deal_type}}>{{deal_type}}</option>
+                        <option value={{#if selection.deal}}{{selection.deal}}{{else}}{{deal_type}}{{/if}}>{{deal_type}}</option>
                     {{/each}}
                 </select>
             </div>
             <h2 for="sport">Pick A Sport</h2>
             <div>
                 <select class="form-select" aria-label="Default select example" id="sport" name="sport">
-                    <option selected disabled>{{#if selection}}{{selection.sport}}{{else}}Sport{{/if}}</option>
+                    <option selected disabled value={{selection.sport}}>{{#if selection.sport}}{{selection.sport}}{{else}}Sport{{/if}}</option>
                     {{#each sport}}
-                        <option value={{sport_key}}>{{sport_name}} {{sport_league}}</option>
+                        <option value={{#if selection.sport}}{{selection.sport_key}}{{else}}{{sport_key}}{{/if}}>{{sport_name}} {{sport_league}}</option>
                     {{/each}}
                 </select>
             </div>
@@ -62,4 +62,4 @@
             {{/each}}
         </table>
     </div>
-{{!-- </div> --}}
+</div>

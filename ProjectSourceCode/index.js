@@ -90,8 +90,14 @@ const selection = {
   sportsbook: undefined,
   deal: undefined,
   sport: undefined,
+  sport_key: undefined,
 };
 
+const options = {
+  sportsbooks: undefined,
+  deals: undefined,
+  sports: undefined,
+};
 app.get('/', (req, res) => {
     res.redirect('/register') //this will call the /register route in the API
 });
@@ -211,20 +217,20 @@ app.get('/home', async (req,res) => {
     const deal_query = 'SELECT * FROM deals';
     const sport_query = 'SELECT * FROM sports';
     try  {
-      const sportsbooks = await db.manyOrNone(sportsbook_query);
-      const deals = await db.manyOrNone(deal_query);
-      const sports = await db.manyOrNone(sport_query);
+      options.sportsbooks = await db.manyOrNone(sportsbook_query);
+      options.deals = await db.manyOrNone(deal_query);
+      options.sports = await db.manyOrNone(sport_query);
       res.render('pages/home', {
-        sportsbook: sportsbooks,
-        deal: deals,
-        sport: sports,
+        sportsbook: options.sportsbooks,
+        deal: options.deals,
+        sport: options.sports,
         message: req.query.message,
         selection: selection,
       })
     }
     catch (err) {
         console.log(err);
-        message = "Bets Data Not Found";
+        message = "Selection Menu Not Found";
         res.render('pages/home', {
           sportsbook: [],
           deal: [],
@@ -233,40 +239,14 @@ app.get('/home', async (req,res) => {
         })
     };
   });
-  // axios({
-  //   url: `https://api.the-odds-api.com/v4/sports`,
-  //   method: 'get',
-  //   dataType: 'json',
-  //   maxBodyLength: Infinity,
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   params: {
-  //     apikey: process.env.API_KEY,
-  //   },
-  // })
-  //   .then(results => {
-  //     console.log(results); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
-  //     res.render('pages/home', {
-  //       sport: results,
-  //     });
-  //   })
-  //   .catch(error => {
-  //     // Handle errors
-  //     message = "Could Not Find Data";
-  //     res.render('pages/home', {
-  //       results: [],
-  //       error: error,
-  //       message: message,
-  //     });
-  //   });
 
 app.post('/home/odds', (req, res) => {
   selection.sportsbook = req.body.sportsbook;
   selection.deal = req.body.deal;
   selection.sport = req.body.sport;
+  selection.sport_key = req.body.sport;
   const selected_url = 'https://api.the-odds-api.com/v4/sports/' + selection.sport + '/odds';
-  // const selected_url = 'https://api.the-odds-api.com/v4/sports?'
+  // const selected_url = 'https://api.the-odds-api.com/v4/sports?' //basic url to call api without cost
   console.log(selected_url)
   let data = JSON.stringify({
     query: ``,
@@ -296,12 +276,15 @@ app.post('/home/odds', (req, res) => {
     res.render('pages/home', {
       event: response.data,
       selection: selection,
+      sportsbook: options.sportsbooks,
+      deal: options.deals,
+      sport: options.sports,
     });
   })
   .catch((error) => {
     console.log(error);
-    message = "Odds API Failed";
-    res.redirect('/home?message=' + message);
+    message = "Odds Unavialable for Your Selection. Please Try Again";
+    res.redirect('/home?message=' + message + '&error=true');
   });
 });  
 
