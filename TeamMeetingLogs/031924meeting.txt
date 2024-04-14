@@ -1,5 +1,0 @@
-In our meeting today we went over how to use The Odds API with eachother. 
-We also discussed terminology on how to read Odds from the API 
-    How we will compare odds and how our website will show the sports betting to the user
-    Brainstormed ideas on how to show information on the website
-    Worked on Use Case diagrams 

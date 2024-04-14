@@ -1,7 +1,0 @@
-API Confirmed and working
-
-Workflow
-    Work in feature focus
-    front and back end for login, register and profile pages
-
-Make sure to test API again and get basic info on page
