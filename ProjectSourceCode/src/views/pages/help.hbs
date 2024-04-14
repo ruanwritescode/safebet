@@ -1,0 +1,39 @@
+{{message}}
+
+{{!-- Starter help page (Figuring out how to include sockets withint he prototype page) --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Help Page</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Help Center</h1>
+</header>
+<main>
+    <div id="chat-box">
+        <div id="chat-messages" class="chat-messages"></div>
+        <textarea id="chat-input" placeholder="Type your message here..."></textarea>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <aside>
+        <h2>Pages</h2>
+        <ul>
+            <li><a href="page1.html">Login</a></li> 
+            <li><a href="page2.html">Home</a></li>
+            <li><a href="page3.html">About</a></li>
+
+
+            {{!-- Implemenation of box w/ sockets --}}
+
+ 
+
+        </ul>
+    </aside>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<header>
+  <nav class="navbar navbar-expand-sm border-bottom">
+    <div class="container">
+      <button
+        class="navbar-toggler ms-auto"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse"
+        aria-controls="navbar"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href='/home'>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href='/about'>About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href='/help'>Help</a>
+          </li>
+        </ul>
+        <div class="nav-item me-1">
+          {{!-- make profile button a drop down menu. link to profile and link to logout --}}
+            {{!-- <a class="nav-link" href='/profile'>Profile</a> --}}
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="/profile">Go To Profile</a></li>
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </div>
+  </nav> 
+</header>
