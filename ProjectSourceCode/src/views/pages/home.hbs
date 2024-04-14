@@ -50,6 +50,12 @@
                     <td>{{title}}</td>
                     <td>{{markets.[0].outcomes.[0].price}}</td>
                     <td>{{markets.[0].outcomes.[1].price}}</td>
+                    <td>
+                        <form action="/bets/add" type="submit" method="post">
+                            <input type="hidden" class="form-control" id="add" name="event_id" value={{id}}>
+                            <button id="submit-button" type="submit" class="btn btn-secondary">{{id}}</button>
+                        </form>      
+                    </td>
                 </tr>
                 {{/each}}
             {{/each}}
