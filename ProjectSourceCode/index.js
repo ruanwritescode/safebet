@@ -240,12 +240,21 @@ app.get('/home', async (req,res) => {
     };
   });
 
-app.post('/home/odds', (req, res) => {
-  selection.sportsbook = req.body.sportsbook;
-  selection.deal = req.body.deal;
-  selection.sport = req.body.sport;
-  selection.sport_key = req.body.sport;
-  const selected_url = 'https://api.the-odds-api.com/v4/sports/' + selection.sport + '/odds';
+app.post('/home/odds', async (req, res) => {
+  console.log(req.body);
+  try {
+    selection.sportsbook = await db.one('SELECT * FROM sportsbooks WHERE sportsbook_id = $1',[req.body.sportsbook]);
+    selection.deal = await db.one('SELECT * FROM deals WHERE deal_id = $1',[req.body.deal]);
+    selection.sport = await db.one('SELECT * FROM sports WHERE sport_id = $1',[req.body.sport]);
+  }
+  catch (err) {
+    error = true;
+    message = "Please Make All Required Selections";
+    res.redirect('/home?message=' + message + '&error=' + error);
+    return;
+  }
+  console.log(selection.sport.sport_name);
+  const selected_url = 'https://api.the-odds-api.com/v4/sports/' + selection.sport.sport_key + '/odds';
   // const selected_url = 'https://api.the-odds-api.com/v4/sports?' //basic url to call api without cost
   console.log(selected_url)
   let data = JSON.stringify({

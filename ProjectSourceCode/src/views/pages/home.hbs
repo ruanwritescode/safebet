@@ -3,39 +3,60 @@
     <h1>Welcome to SafeBets</h1>
     <div class="bets-picker" id="form">
         <form action="/home/odds" type='submit' method="POST">
-            <h2 for="sportsbook">Pick A Sportsbook</h2>
-            <div>
-                <select class="form-select" aria-label="Default select example" id="sportsbook" name="sportsbook">
-                    <option selected disabled value={{selection.sportsbook}}>{{#if selection.sportsbook}}{{selection.sportsbook}}{{else}}Sportsbook{{/if}}</option>
-                    {{#each sportsbook}}
-                        <option value={{#if selection.sportsbook}}{{selection.sportsbook}}{{else}}{{sportsbook_name}}{{/if}}>{{sportsbook_name}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <h2 for="deal">Pick A Deal</h2>
-            <div>
-                <select class="form-select" aria-label="Default select example" id="deal" name="deal">
-                    <option selected disabled value={{selection.deal}}>{{#if selection.deal}}{{selection.deal}}{{else}}Deal{{/if}}</option>
-                    {{#each deal}}
-                        <option value={{#if selection.deal}}{{selection.deal}}{{else}}{{deal_type}}{{/if}}>{{deal_type}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <h2 for="sport">Pick A Sport</h2>
-            <div>
-                <select class="form-select" aria-label="Default select example" id="sport" name="sport">
-                    <option selected disabled value={{selection.sport}}>{{#if selection.sport}}{{selection.sport}}{{else}}Sport{{/if}}</option>
-                    {{#each sport}}
-                        <option value={{#if selection.sport}}{{selection.sport_key}}{{else}}{{sport_key}}{{/if}}>{{sport_name}} {{sport_league}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <div>
-                <button type="submit" id="submit-button">Get Bets</button>
-            </div>
-        </form>
+            <table class="table">
+                <tr>
+                    <th>Sportsbook:</th>
+                    <th>League:</th>
+                    <th>Deal Type:</th>
+                    <th>Deal Amount:</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" id="sportsbook" name="sportsbook">
+                            <option selected value={{#if selection.sportsbook}}{{selection.sportsbook.sportsbook_id}}{{/if}}>
+                                {{#if selection.sportsbook}}{{selection.sportsbook.sportsbook_name}}{{else}}ALL{{/if}}
+                            </option>
+                            {{#each sportsbook}}
+                                <option value={{sportsbook_id}}>{{sportsbook_name}}</option>
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" id="sport" name="sport">
+                            <option selected value={{#if selection.sport}}{{selection.sport.sport_id}}{{/if}}>
+                                {{#if selection.sport}}{{selection.sport.sport_name}} {{selection.sport.sport_league}}{{else}}NONE{{/if}}
+                            </option>
+                            {{#each sport}}
+                                <option value={{sport_id}}>
+                                    {{sport_name}} {{sport_league}}
+                                </option>
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" id="deal" name="deal">
+                            <option selected value={{#if selection.deal}}{{selection.deal.deal_id}}{{/if}}>
+                                {{#if selection.deal}}{{selection.deal.deal_type}}{{else}}NONE{{/if}}
+                            </option>
+                            {{#each deal}}
+                                <option value={{deal_id}}>{{deal_type}}</option>
+                            {{/each}}
+                        </select>
+                    </td>
+                    <td>
+                        {{#if selection.deal}}{{selection.deal.deal_type}}{{else}}NONE{{/if}}
+                    </td>
+                    <td>
+                        <button type="submit" id="submit-button">Get Bets</button>
+                    </td>
+                </tr>
+            </table>
+        <div>
+            
+        </div>
+    </form>
     </div>
-
+    {{#if selection.sport}}
     <div class="eligible-bets">
         <h2>Current Eligible Bets</h2>
         <table class="table">
@@ -62,4 +83,5 @@
             {{/each}}
         </table>
     </div>
+    {{/if}}
 </div>
