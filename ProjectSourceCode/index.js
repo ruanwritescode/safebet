@@ -177,7 +177,8 @@ app.post('/register', async (req, res) => {
     try {
       const data = await db.oneOrNone(query,username);
       if(!data) {
-        res.redirect('/register');
+        message = `Username "${username}" Could Not Be Found`;
+        throw new Error(message);
       }
       const match = await bcrypt.compare(password, data.password);
       if(!match) {
@@ -425,6 +426,7 @@ app.post('/bets/add', async (req, res) => {
       deal: options.deals,
       sport: options.sports,
       message: message,
+      error: true,
     });
     return;
   }
@@ -478,8 +480,16 @@ app.post('/bets/add', async (req, res) => {
   }
   catch (error) {
     console.log(error);
-    message = "Could not add event to database";
-    res.redirect('/home?message=' + message + '&error=true');
+    message = "Could Not Add Event To Database";
+    res.render('pages/home', {
+      event: events,
+      selection: selection,
+      sportsbook: options.sportsbooks,
+      deal: options.deals,
+      sport: options.sports,
+      error: true,
+      message: message,
+    })
   }
 });
 
