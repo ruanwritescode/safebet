@@ -467,7 +467,6 @@ app.post('/bets/add', async (req, res) => {
     await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id]);
     await db.none(query_bet, [sb_id,event_id,odds_f,odds_n]);
     let bet_data = await db.any(check_bet,[sb_id,event_id]);
-    console.log('bet data',bet_data);
     await db.none('INSERT INTO userHistory (user_id, bet_id) VALUES ($1, $2)',[user.user_id,bet_data[0].bet_id]);
     res.render('pages/home', {
       event: events,
@@ -490,7 +489,6 @@ app.get('/profile', async (req, res) => {
   const user_hist_query = 'SELECT * FROM userHistory uh INNER JOIN bets b ON uh.bet_id = b.bet_id INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id'
   try {
     userHist = await db.any(user_hist_query);
-    console.log(userHist);
     res.render('pages/profile', {
       user: user,
       history: userHist,
