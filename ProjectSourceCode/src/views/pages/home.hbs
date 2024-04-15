@@ -1,23 +1,97 @@
-<div class="container">
+{{> message}}
+<div class="container" id="form">
     <h1>Welcome to SafeBets</h1>
-    <div class="active-deal">
-        <h2>Active Deal</h2>
-        <form action="/place_bet" method="POST">
-            <label for="betAmount">Enter Active Deal:</label>
-            <input type="number" id="betAmount" name="betAmount" required>
-            <button type="submit">Submit</button>
+    <div class="bets-picker" id="form">
+        <form action="/home/odds" type='submit' method="POST">
+            <table class="table text-center align-middle">
+                <tr>
+                    <th>Sportsbook:</th>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" id="sportsbook" name="sportsbook">
+                            <option {{#unless selection.sportsbook}}selected{{/unless}} value=''>ALL</option>
+                            {{#each sportsbook}}
+                                <option {{#when sportsbook_id 'eq' ../selection.sportsbook.sportsbook_id}}selected {{/when}} value={{sportsbook_id}}>{{sportsbook_name}}</option>
+                            {{/each}}
+                        </select>
+                    </td>
+                    <th>League:</th>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" id="sport" name="sport">
+                            {{#unless selection.sport}}<option selected value=''>NONE</option>{{/unless}}
+                            {{#each sport}}
+                                <option {{#when sport_id 'eq' ../selection.sport.sport_id}}selected{{/when}} value={{sport_id}}>
+                                    {{sport_name}} {{sport_league}}
+                                </option>
+                            {{/each}}
+                        </select>
+                    </td>
+                    <th>Deal Type:</th>
+                    <td>
+                        <select class="form-select" aria-label="Default select example" id="deal" name="deal">
+                            <option selected value={{#if selection.deal}}{{selection.deal.deal_id}}{{/if}}>
+                                {{#if selection.deal}}{{selection.deal.deal_type}}{{else}}NONE{{/if}}
+                            </option>
+                            {{#each deal}}
+                                {{#when deal_id 'noteq' ../selection.deal.deal_id}}
+                                <option value={{deal_id}}>{{deal_type}}</option>
+                                {{/when}}
+                            {{/each}}
+                        </select>
+                    </td>
+                    <th>Deal Amount:</th>
+                    <td>
+                        <input type="number" id="deal_amount" name="deal_amount">
+                    </td>
+                </tr>
+            </table>
+            <div class="text-center">
+                <button class="btn btn-primary col-2" type="submit" id="submit-button">Get Bets</button>
+            </div>
         </form>
     </div>
-    
-    <div class="current-odds">
-        <h2>Current Eligible Odds</h2>
-        <ul>
-            {{!#each bets}}
-            <li>
-                <span>{{!sport}}</span>
-                <span> - {{!winnings}}</span>
-            </li>
-            {{!/each}}
-        </ul>
+    {{#if selection.sport}}
+    <div class="eligible-bets">
+        <h2>Current Eligible Bets</h2>
+        <table class="table">
+            {{#each event}}
+                <tr>
+                    <th></th>
+                    <th>{{home_team}}</th>
+                    <th>{{away_team}}</th>
+                </tr>
+                {{#each bookmakers}}
+                    {{#if ../../selection.sportsbook}}
+                        {{#when ../../selection.sportsbook.sportsbook_name 'eq' title}}
+                        <tr>
+                            <td>{{title}}</td>
+                            <td>{{markets.[0].outcomes.[0].price}}</td>
+                            <td>{{markets.[0].outcomes.[1].price}}</td>
+                            <td>
+                                <form action="/bets/add" type="submit" method="post">
+                                    <input type="hidden" class="form-control" id="event_id" name="event_id" value={{../id}}>
+                                    <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value={{key}}>
+                                    <button id="submit-button" type="submit" class="btn btn-secondary">SELECT</button>
+                                </form>      
+                            </td>
+                        </tr>
+                        {{/when}}
+                    {{else}}
+                        <tr>
+                            <td>{{title}}</td>
+                            <td>{{markets.[0].outcomes.[0].price}}</td>
+                            <td>{{markets.[0].outcomes.[1].price}}</td>
+                            <td>
+                                <form action="/bets/add" type="submit" method="post">
+                                    <input type="hidden" class="form-control" id="event_id" name="event_id" value={{../id}}>
+                                    <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value={{key}}>
+                                    <button id="submit-button" type="submit" class="btn btn-secondary">SELECT</button>
+                                </form>      
+                            </td>
+                        </tr>
+                    {{/if}}
+                {{/each}}
+            {{/each}}
+        </table>
     </div>
+    {{/if}}
 </div>
