@@ -486,16 +486,16 @@ app.post('/bets/add', async (req, res) => {
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
 app.get('/profile', async (req, res) => {
-  const user_hist_query = 'SELECT * FROM userHistory uh INNER JOIN bets b ON uh.bet_id = b.bet_id INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id'
+  const user_hist_query = 'SELECT * FROM userHistory uh INNER JOIN bets b ON uh.bet_id = b.bet_id INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id WHERE uh.user_id = $1'
   try {
-    userHist = await db.any(user_hist_query);
+    userHist = await db.any(user_hist_query,[user.user_id]);
     res.render('pages/profile', {
       user: user,
       history: userHist,
     })
   }
   catch (error) {
-    message = "Could Not Load User"
+    message = "Could Not Load User History"
     res.render('pages/profile', {
       message: message,
     });
