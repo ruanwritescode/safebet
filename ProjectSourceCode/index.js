@@ -98,8 +98,45 @@ const options = {
   deals: undefined,
   sports: undefined,
 };
-app.get('/', (req, res) => {
-    res.redirect('/register') //this will call the /register route in the API
+
+const free_url = 'https://api.the-odds-api.com/v4/sports?' //basic url to call api without cost
+
+app.get('/', async (req, res) => {
+  let data = JSON.stringify({
+    query: ``,
+    variables: {}
+  });
+  
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: free_url,
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    params: {
+      api_key: process.env.API_KEY,
+    },
+    data : data
+  };
+  try {
+    response = await axios.request(config);
+    let sports = response.data;
+    let query = 'INSERT INTO sports (sport_key, sport_name, sport_league) VALUES';
+    let limit = sports.length -1
+    for (let i = 0; i < limit; i++) {
+      if(!sports[i].has_outrights && sports[i].active) {
+        query = query + '(\'' + sports[i].key + '\',\'' + sports[i].group + '\',\'' + sports[i].title + '\'),';
+      }
+    }
+    query = query + '(\'' + sports[limit].key + '\',\'' + sports[limit].group + '\',\'' + sports[limit].title + '\');';
+    await db.none(query);
+  }
+  catch(error) {
+    console.log(error);
+    return;
+  };
+  res.redirect('/register') //this will call the /register route in the API
 });
 
 // ------------------- ROUTES for register.hbs ------------------- //
@@ -213,38 +250,51 @@ app.use(auth);
 
 // ------------------- ROUTES for home.hbs ------------------- //
 app.get('/home', async (req,res) => {
-    const sportsbook_query = 'SELECT * FROM sportsbooks';
-    const deal_query = 'SELECT * FROM deals';
-    const sport_query = 'SELECT * FROM sports';
-    try  {
-      options.sportsbooks = await db.manyOrNone(sportsbook_query);
-      options.deals = await db.manyOrNone(deal_query);
-      options.sports = await db.manyOrNone(sport_query);
+  let selection = {
+    sportsbook: undefined,
+    deal: undefined,
+    sport: undefined,
+    sport_key: undefined,
+  };
+  const sportsbook_query = 'SELECT * FROM sportsbooks';
+  const deal_query = 'SELECT * FROM deals';
+  const sport_query = 'SELECT * FROM sports';
+  try  {
+    options.sportsbooks = await db.manyOrNone(sportsbook_query);
+    options.deals = await db.manyOrNone(deal_query);
+    options.sports = await db.manyOrNone(sport_query);
+    res.render('pages/home', {
+      sportsbook: options.sportsbooks,
+      deal: options.deals,
+      sport: options.sports,
+      message: req.query.message,
+      selection: selection,
+    })
+  }
+  catch (err) {
+      console.log(err);
+      message = "Selection Menu Not Found";
       res.render('pages/home', {
-        sportsbook: options.sportsbooks,
-        deal: options.deals,
-        sport: options.sports,
-        message: req.query.message,
-        selection: selection,
+        sportsbook: [],
+        deal: [],
+        sport: [],
+        message: message,
       })
-    }
-    catch (err) {
-        console.log(err);
-        message = "Selection Menu Not Found";
-        res.render('pages/home', {
-          sportsbook: [],
-          deal: [],
-          sport: [],
-          message: message,
-        })
-    };
-  });
+  };
+});
 
 app.post('/home/odds', async (req, res) => {
-  console.log(req.body);
+  console.log(req.body.sportsbook)
   try {
-    selection.sportsbook = await db.one('SELECT * FROM sportsbooks WHERE sportsbook_id = $1',[req.body.sportsbook]);
-    selection.deal = await db.one('SELECT * FROM deals WHERE deal_id = $1',[req.body.deal]);
+    if(req.body.sportsbook) {
+      selection.sportsbook = await db.oneOrNone('SELECT * FROM sportsbooks WHERE sportsbook_id = $1',[req.body.sportsbook]);
+    }
+    else {
+      selection.sportsbook = undefined;
+    };
+    if(req.body.deal) {
+      selection.deal = await db.oneOrNone('SELECT * FROM deals WHERE deal_id = $1',[req.body.deal]);
+    };
     selection.sport = await db.one('SELECT * FROM sports WHERE sport_id = $1',[req.body.sport]);
   }
   catch (err) {
@@ -253,10 +303,9 @@ app.post('/home/odds', async (req, res) => {
     res.redirect('/home?message=' + message + '&error=' + error);
     return;
   }
-  console.log(selection.sport.sport_name);
+  console.log(selection.sportsbook);
+  console.log(selection.sport);
   const selected_url = 'https://api.the-odds-api.com/v4/sports/' + selection.sport.sport_key + '/odds';
-  // const selected_url = 'https://api.the-odds-api.com/v4/sports?' //basic url to call api without cost
-  console.log(selected_url)
   let data = JSON.stringify({
     query: ``,
     variables: {}
@@ -265,7 +314,7 @@ app.post('/home/odds', async (req, res) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: selected_url,
+    url: free_url,
     headers: { 
       'Content-Type': 'application/json'
     },

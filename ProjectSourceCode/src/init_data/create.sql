@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS userHistory (
 
 CREATE TABLE IF NOT EXISTS sports (
     sport_id SERIAL PRIMARY KEY,
-    sport_key VARCHAR(64) NOT NULL,
-    sport_name VARCHAR(32) NOT NULL,
-    sport_league VARCHAR(16) NOT NULL
+    sport_key VARCHAR(64) NOT NULL UNIQUE,
+    sport_name VARCHAR(64) NOT NULL,
+    sport_league VARCHAR(64) NOT NULL
 );

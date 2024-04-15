@@ -13,16 +13,16 @@ INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
     ('acegae12354ce3a12', 'Chicago White Sox', 'Cleveland Guardians', '2022-04-16', FALSE),
     ('adcf31c235a231ad1', 'Miami Marlins', 'New York Yankees', '2022-05-01', TRUE);
 
-INSERT INTO sports (sport_key, sport_name, sport_league)
-    VALUES
-    ('americanfootball_nfl','American Football','NFL'),
-    ('americanfootball_ncaaf','American Football','NCAAF'),
-    ('basketball_nba','Basketball','NBA'),
-    ('basketball_ncaa','Basketball','NCAA'),
-    ('baseball_mlb','Baseball','MLB'),
-    ('baseball_ncaa','Baseball','NCAA'),
-    ('icehockey_nhl','Ice Hockey','NHL'),
-    ('soccer_usa_mls','Soccer','MLS');
+-- INSERT INTO sports (sport_key, sport_name, sport_league)
+--     VALUES
+--     ('americanfootball_nfl','American Football','NFL'),
+--     ('americanfootball_ncaaf','American Football','NCAAF'),
+--     ('basketball_nba','Basketball','NBA'),
+--     ('basketball_ncaa','Basketball','NCAA'),
+--     ('baseball_mlb','Baseball','MLB'),
+--     ('baseball_ncaa','Baseball','NCAA'),
+--     ('icehockey_nhl','Ice Hockey','NHL'),
+--     ('soccer_usa_mls','Soccer','MLS');
 
 INSERT INTO sportsbooks (sportsbook_name,sportsbook_url)
     VALUES
