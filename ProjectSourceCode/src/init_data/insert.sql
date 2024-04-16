@@ -2,27 +2,16 @@
 INSERT INTO users (username, password, first_name, last_name, email, birth_date, register_date)
     VALUES
     ('cgoren', 'abc1234', 'Chasen', 'Goren', 'chgo3684@colorado.edu', '2000-10-18', '2023-03-30'),
-    ('rabarbanel', '123abc', 'Ruan', 'Abarbanel', 'ruab1658@colorad.edu', '1997-12-13', '2023-01-01'),
+    ('berg', '$2b$10$SANLjs99hcYsWJ0T/nvAEO5URLzDXED.ZRIL0wKRT1xvQLoWHi2cu', 'Ruan', 'Abarbanel', 'ruab1658@colorad.edu', '1997-12-13', '2023-01-01'),
     ('joshgildred', 'asecge', 'Josh', 'Gildred', 'jogi2895@colorado.edu', '2002-04-26', '2023-02-12'),
     ('aava7378', 'hsvase', 'Aaron', 'Van', 'aava7378@gmail.com', '2001-02-28', '2022-05-01'),
     ('admin','$2b$10$NEtH/I6xX1e58LzONkM6SeKBnrgvbkn/wcXCcERsywRb6R8k.VLgO','Adminny','McAdminister','admin@email.com','1999-12-31','2024-04-14');
 
-INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
-    VALUES
-    ('adcea12351d134ar1', 'Indiana St Sycamores', 'Utah Utes', '2022-04-30', TRUE),
-    ('acegae12354ce3a12', 'Chicago White Sox', 'Cleveland Guardians', '2022-04-16', FALSE),
-    ('adcf31c235a231ad1', 'Miami Marlins', 'New York Yankees', '2022-05-01', TRUE);
-
--- INSERT INTO sports (sport_key, sport_name, sport_league)
+-- INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
 --     VALUES
---     ('americanfootball_nfl','American Football','NFL'),
---     ('americanfootball_ncaaf','American Football','NCAAF'),
---     ('basketball_nba','Basketball','NBA'),
---     ('basketball_ncaa','Basketball','NCAA'),
---     ('baseball_mlb','Baseball','MLB'),
---     ('baseball_ncaa','Baseball','NCAA'),
---     ('icehockey_nhl','Ice Hockey','NHL'),
---     ('soccer_usa_mls','Soccer','MLS');
+--     ('adcea12351d134ar1', 'Indiana St Sycamores', 'Utah Utes', '2022-04-30', TRUE),
+--     ('acegae12354ce3a12', 'Chicago White Sox', 'Cleveland Guardians', '2022-04-16', FALSE),
+--     ('adcf31c235a231ad1', 'Miami Marlins', 'New York Yankees', '2022-05-01', TRUE);
 
 INSERT INTO sportsbooks (sportsbook_name,sportsbook_url)
     VALUES

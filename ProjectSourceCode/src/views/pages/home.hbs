@@ -1,4 +1,3 @@
-{{> message}}
 <div class="container" id="form">
     <h1>Welcome to SafeBets</h1>
     <div class="bets-picker" id="form">
@@ -55,40 +54,36 @@
         <table class="table">
             {{#each event}}
                 <tr>
-                    <th></th>
+                    <th>{{commence_time}}</th>
                     <th>{{home_team}}</th>
                     <th>{{away_team}}</th>
                 </tr>
                 {{#each bookmakers}}
-                    {{#if ../../selection.sportsbook}}
-                        {{#when ../../selection.sportsbook.sportsbook_name 'eq' title}}
-                        <tr>
-                            <td>{{title}}</td>
-                            <td>{{markets.[0].outcomes.[0].price}}</td>
-                            <td>{{markets.[0].outcomes.[1].price}}</td>
-                            <td>
-                                <form action="/bets/add" type="submit" method="post">
-                                    <input type="hidden" class="form-control" id="event_id" name="event_id" value={{../id}}>
-                                    <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value={{key}}>
-                                    <button id="submit-button" type="submit" class="btn btn-secondary">SELECT</button>
-                                </form>      
-                            </td>
-                        </tr>
+                        <tr  
+                        {{#if ../../selection.sportsbook}}
+                        {{#when ../../selection.sportsbook.sportsbook_name 'noteq' title}}style="display:none;"
                         {{/when}}
-                    {{else}}
-                        <tr>
+                        {{/if}}>
                             <td>{{title}}</td>
                             <td>{{markets.[0].outcomes.[0].price}}</td>
                             <td>{{markets.[0].outcomes.[1].price}}</td>
-                            <td>
+                            <td class="col-3">
                                 <form action="/bets/add" type="submit" method="post">
-                                    <input type="hidden" class="form-control" id="event_id" name="event_id" value={{../id}}>
-                                    <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value={{key}}>
+                                    <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../id}}'>
+                                    <input type="hidden" class="form-control" id="time" name="time" value='{{../commence_time}}'>
+
+                                    <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../home_team}}'>
+                                    <input type="hidden" class="form-control" id="odds_a" name="odds_a" value='{{markets.[0].outcomes.[0].price}}'>
+
+                                    <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../away_team}}'>
+                                    <input type="hidden" class="form-control" id="odds_b" name="odds_b" value='{{markets.[0].outcomes.[1].price}}'>
+
+                                    <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value='{{title}}'>
+
                                     <button id="submit-button" type="submit" class="btn btn-secondary">SELECT</button>
                                 </form>      
                             </td>
                         </tr>
-                    {{/if}}
                 {{/each}}
             {{/each}}
         </table>

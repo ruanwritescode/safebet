@@ -2,23 +2,23 @@
     <table>
         <tr>
             <th>FIRST NAME</th>
-            <td>{{first_name}}</td>
+            <td>{{user.first_name}}</td>
         </tr>
         <tr>
             <th>LAST NAME</th>
-            <td>{{last_name}}</td>
+            <td>{{user.last_name}}</td>
         </tr>
         <tr>
             <th>USER NAME</th>
-            <td>{{username}}</td>
+            <td>{{user.username}}</td>
         </tr>
         <tr>
             <th>EMAIL</th>
-            <td>{{email}}</td>
+            <td>{{user.email}}</td>
         </tr>
         <tr>
             <th>REGISTER DATE</th>
-            <td>{{register_date}}</td>
+            <td>{{user.register_date}}</td>
         </tr>
     </table>
         
@@ -27,24 +27,23 @@
 <div class="container">
     <h2>Bet History</h2>
     <table class="table">
-        <thead>
-            <tr>
-                <th>Sport</th>
-                <th>Game</th>
-                <th>Bet Amount</th>
-            </tr>
-        </thead>
-        <tbody> 
-            {{!-- Edit loop after data model is created--}}
-            {{!-- {{#each bet}}
-            <tr>
-                <td>{{sport}}</td>
-                <td>{{team_f}} vs {{team_n}} on {{event_date}}</td>
-                <td>{{outome_f}}</td>
-                <td>{{bet_amount}}</td>
-                <td>{{winnings}}</td>
-            </tr>
-            {{/each}} --}}
-        </tbody>
+        <tr>
+            <th>League</th>
+            <th>Sportsbook</th>
+            <th>Game</th>
+            <th>Winner</th>
+            <th>Bet Amount</th>
+            <th>Earnings</th>
+        </tr>
+        {{#each history}}
+        <tr>
+            <td>{{sport_league}}</td>
+            <td>{{sportsbook_name}}</td>
+            <td>{{team_f}} vs {{team_n}} on {{event_date}}</td>
+            <td>{{#when outome 'eq' 'f'}}{{team_f}}{{/when}}{{#when outcome 'eq' 'n'}}{{team_n}}{{/when}}{{#when outcome 'eq' '0'}}N/A{{/when}}</td>
+            <td>{{bet_amount}}</td>
+            <td>{{winnings}}</td>
+        </tr>
+        {{/each}}
     </table>
 </div>

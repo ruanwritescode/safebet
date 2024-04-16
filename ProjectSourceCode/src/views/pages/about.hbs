@@ -1,32 +1,24 @@
+<div id="app" class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Safebet</h1>
+        <p class="lead">Safebet is a software designed to make sports betting safer by providing reliable data analysis and risk management tools.</p>
+        <hr class="my-4">
+        <p>Our mission is to ensure that users engage in sports betting responsibly and with confidence.</p>
+    </div>
 
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-    <div id="app" class="container mt-5">
-        <div class="jumbotron">
-            <h1 class="display-4">Safebet</h1>
-            <p class="lead">Safebet is a software designed to make sports betting safer by providing reliable data analysis and risk management tools.</p>
-            <hr class="my-4">
-            <p>Our mission is to ensure that users engage in sports betting responsibly and with confidence.</p>
-        </div>
-
-        <h2 class="text-center mb-4">Meet the Team</h2>
-        <div class="row">
-            <div class="col-md-4" v-for="(member, index) in team" :key="index">
-                <div class="card team-card">
-                    <img :src="member.image" class="card-img-top" alt="Profile Picture">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ member.name }}</h5>
-                        <p class="card-text">{{ member.description }}</p>
-                    </div>
+    <h2 class="text-center mb-4">Meet the Team</h2>
+    <div class="row">
+        <div class="col-md-4" v-for="(member, index) in team" :key="index">
+            <div class="card team-card">
+                <img :src="member.image" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">{{ member.name }}</h5>
+                    <p class="card-text">{{ member.description }}</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
+    
 
