@@ -129,3 +129,44 @@ describe('Testing Place Bet API', () => {
       });
   });
 });
+
+// ********************** Home Page Test cases *******************************
+describe('HomePage', () => {
+  // Positive test case testing valid selection submission
+  it('Accepts successfull submission for a valid form selection', done => {
+    chai
+      .request(server)
+      .post('/home/odds')
+      .send({
+        sportsbook: '01',  
+        sport: '02',       
+        deal: '03',        
+        deal_amount: 1000  // positive deal amount
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('successful', true);
+        expect(res.body.message).to.equal('Bets are fetched successfully');
+        done();
+      });
+  });
+
+  // Negative test case testing for invalid input in deal amount
+  it('rejects submission for an invalid deal amount', done => {
+    chai
+      .request(server)
+      .post('/home/odds')
+      .send({
+        sportsbook: '01',  
+        sport: '02',       
+        deal: '03',        
+        deal_amount: -1000 // negative deal amount
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property('successfull', false);
+        expect(res.body.message).to.equal('Deal amount must be a positive number!');
+        done();
+      });
+  });
+});
