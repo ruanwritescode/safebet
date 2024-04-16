@@ -38,3 +38,11 @@ form button:hover {
     list-style-type: none;
     padding: 0;
 }
+.team-card {
+    margin-bottom: 20px;
+}
+
+.team-card img {
+    width: 100%;
+    height: auto;
+}
