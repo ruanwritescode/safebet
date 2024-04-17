@@ -15,4 +15,4 @@ Step one of setting up the app... (wip)
 
 To run a test on the program you must.. (wip)
 
-Here is the fully built app - htpps://demolink.com
+Here is the fully built app - [htpps://demolink.com](http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/home/odds)
