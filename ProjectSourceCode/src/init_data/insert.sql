@@ -5,7 +5,7 @@ INSERT INTO users (username, password, first_name, last_name, email, birth_date,
     ('berg', '$2b$10$SANLjs99hcYsWJ0T/nvAEO5URLzDXED.ZRIL0wKRT1xvQLoWHi2cu', 'Ruan', 'Abarbanel', 'ruab1658@colorad.edu', '1997-12-13', '2023-01-01'),
     ('joshgildred', 'asecge', 'Josh', 'Gildred', 'jogi2895@colorado.edu', '2002-04-26', '2023-02-12'),
     ('aava7378', 'hsvase', 'Aaron', 'Van', 'aava7378@gmail.com', '2001-02-28', '2022-05-01'),
-    ('admin','$2b$10$NEtH/I6xX1e58LzONkM6SeKBnrgvbkn/wcXCcERsywRb6R8k.VLgO','Adminny','McAdminister','admin@email.com','1999-12-31','2024-04-14');
+    ('admin','$2b$10$NEtH/I6xX1e58LzONkM6SeKBnrgvbkn/wcXCcERsywRb6R8k.VLgO','Adminny','McAdminister','jogi2895@colorado.edu','1999-12-31','2024-04-14');
 
 -- INSERT INTO events (event_id, team_f, team_n, event_date, outcome_f)
 --     VALUES

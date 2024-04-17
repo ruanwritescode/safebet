@@ -1,3 +1,7 @@
 docker-compose exec db psql -U postgres
 
 docker-compose up -d
+
+http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/register
+
+ssh -i csci3308safebet_key.pem azureuser@recitation-010-team-01.eastus.cloudapp.azure.com
