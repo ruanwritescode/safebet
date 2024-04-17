@@ -361,7 +361,7 @@ app.get('/profile', (req, res) => {
 // ------------------- ROUTES for help.hbs ------------------- //
 // GET
 app.get('/help', (req, res) => {
-  res.render('pages/help');
+  res.render('pages/help',{user: user,});
 });
 
 // ------------------- ROUTES for about.hbs ------------------- //

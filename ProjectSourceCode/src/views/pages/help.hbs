@@ -1,14 +1,3 @@
-{{> message}}
-
-{{!-- Starter help page (Figuring out how to include sockets withint he prototype page) --}}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Help Page</title>
-<link rel="stylesheet" href="style.css">
-</head>
 <body>
 <header>
     <h1>Help Center</h1>
@@ -25,9 +14,57 @@ s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.h
 .push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
 </script>
 
-<script src="js/help.js"></script>
+<script>
+if({{username}}=='admin'){//--------------admin view-----------------
+Talk.ready.then(function () {    
+    const user = new Talk.User({
+        id: 'admin',
+        name: 'admin',
+        email: 'jogi2895@colorado.edu',
+        photoUrl: 'http://orig06.deviantart.net/5991/f/2010/006/6/9/square_cat_by_bebebelkin.jpg',
+        role: 'admin',
+        welcomeMessage: 'How may I assist you?',
+      });
+
+    const inbox = session.createInbox();
+    inbox.mount(document.getElementById('inbox-container'));
+  });
+}
+else{//-----------------------------------user view-----------------------
+Talk.ready.then(function () {    
+    const user = new Talk.User({
+        id: {{username}},
+        name: {{first_name}},
+        email: {{email}},
+        photoUrl: 'https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png',
+        //welcomeMessage: 'Hi!',
+        role: 'user',
+      });
+    
+    const session = new Talk.Session({
+      appId: 'twPXuf7Y', // replace with your app ID
+      me: user,
+    });
+    
+    const admin = new Talk.User({
+        id: 'admin',
+        name: 'admin',
+        email: 'jogi2895@colorado.edu',
+        photoUrl: 'http://orig06.deviantart.net/5991/f/2010/006/6/9/square_cat_by_bebebelkin.jpg',
+        role: 'admin',
+        welcomeMessage: 'How may I assist you?',
+      });
+
+    const conversation = session.getOrCreateConversation('new_conversation');
+    conversation.setParticipant(user);
+    conversation.setParticipant(admin);
+
+    const chatbox = session.createChatbox();
+    chatbox.select(conversation);
+    chatbox.mount(document.getElementById('talkjs-container'));
+  });
+}
+</script>
 
 </body>
 </html>
-
-
