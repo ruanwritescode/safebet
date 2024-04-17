@@ -1,39 +1,16 @@
-{{> message}}
+<div class="container">
+  <h1>Help Center</h1>
+  <div id='talkjs-container' style='width: 90%; margin: 30px; height: 500px'>
+    <i>Loading chat...</i>
+  </div>
 
-{{!-- Starter help page (Figuring out how to include sockets withint he prototype page) --}}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Help Page</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-    <h1>Help Center</h1>
-</header>
-<main>
-    <div id="chat-box">
-        <div id="chat-messages" class="chat-messages"></div>
-        <textarea id="chat-input" placeholder="Type your message here..."></textarea>
-        <button onclick="sendMessage()">Send</button>
-    </div>
-    <aside>
-        <h2>Pages</h2>
-        <ul>
-            <li><a href="page1.html">Login</a></li> 
-            <li><a href="page2.html">Home</a></li>
-            <li><a href="page3.html">About</a></li>
+  <script>
+  (function(t,a,l,k,j,s){
+  s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.head.appendChild(s)
+  ;k=t.Promise;t.Talk={v:2,ready:{then:function(f){if(k)return new k(function(r,e){l.push([f,r,e])});l
+  .push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
+  </script>
+</div>
 
 
-            {{!-- Implemenation of box w/ sockets --}}
 
- 
-
-        </ul>
-    </aside>
-</main>
-<script src="script.js"></script>
-</body>
-</html>
