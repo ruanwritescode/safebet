@@ -71,3 +71,9 @@ label {
     padding-bottom: 0px;
     margin-top: 8px;
 }
+
+button.login {
+    width: 150px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
