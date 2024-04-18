@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS bets (
     event_id VARCHAR(32) NOT NULL,
     odds_f INT NOT NULL,
     odds_n INT NOT NULL,
+    deal_id INT,
     bet_value DECIMAL(15,2),
     winnings DECIMAL(15,2),
-    deal_id INT,
     FOREIGN KEY(event_id) REFERENCES events(event_id),
     FOREIGN KEY(deal_id) REFERENCES deals(deal_id),
     FOREIGN KEY(sportsbook_id) REFERENCES sportsbooks(sportsbook_id)

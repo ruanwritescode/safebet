@@ -1,16 +1,76 @@
-<div class="container">
-  <h1>Help Center</h1>
-  <div id='talkjs-container' style='width: 90%; margin: 30px; height: 500px'>
-    <i>Loading chat...</i>
-  </div>
+<body>
+<header>
+    <h1>Help Center</h1>
+</header>
 
-  <script>
-  (function(t,a,l,k,j,s){
-  s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.head.appendChild(s)
-  ;k=t.Promise;t.Talk={v:2,ready:{then:function(f){if(k)return new k(function(r,e){l.push([f,r,e])});l
-  .push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
-  </script>
+{{#when username 'eq' 'admin'}}
+<div id='inbox-container' style='width: 90%; margin: 30px; height: 500px'>
+  <i>Loading inbox...</i>
 </div>
+{{/when}}
 
+{{#when username 'noteq' 'admin'}}
+<div id='talkjs-container' style='width: 90%; margin: 30px; height: 500px'>
+  <i>Loading chat...</i>
+</div>
+{{/when}}
 
+<script>
+(function(t,a,l,k,j,s){
+s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.head.appendChild(s)
+;k=t.Promise;t.Talk={v:2,ready:{then:function(f){if(k)return new k(function(r,e){l.push([f,r,e])});l
+.push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
+</script>
 
+<script>
+//--------------admin view-----------------
+{{#when username 'eq' 'admin'}}
+Talk.ready.then(function () {    
+    const admin = new Talk.User({
+        id: 'admin',
+        name: 'admin',
+        email: 'jogi2895@colorado.edu',
+        photoUrl: 'http://orig06.deviantart.net/5991/f/2010/006/6/9/square_cat_by_bebebelkin.jpg',
+        role: 'admin',
+        welcomeMessage: 'How may I assist you?',
+      });
+
+    const session = new Talk.Session({
+      appId: 'twPXuf7Y', // replace with your app ID
+      me: admin
+    });
+
+    const inbox = session.createInbox();
+    inbox.mount(document.getElementById('inbox-container'));
+  });
+{{/when}}
+//--------------user view-----------------------
+{{#when username 'noteq' 'admin'}}
+Talk.ready.then(function () {    
+    const chatter = new Talk.User({
+        id: '{{username}}',
+        name: '{{first_name}}',
+        email: '{{email}}',
+        photoUrl: 'https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png',
+        role: 'user'
+      });
+    
+    const session = new Talk.Session({
+      appId: 'twPXuf7Y', // replace with your app ID
+      me: chatter
+    });
+    
+    const admin = new Talk.User('admin');
+
+    const conversation = session.getOrCreateConversation('{{username}}_conversation');
+    conversation.setParticipant(chatter);
+    conversation.setParticipant(admin);
+
+    const chatbox = session.createChatbox('{{username}}_conversation');
+    chatbox.select(conversation);
+    chatbox.mount(document.getElementById('talkjs-container'));
+  });
+{{/when}}
+</script>
+</body>
+</html>
