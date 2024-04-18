@@ -116,27 +116,30 @@ app.get('/', async (req, res) => {
 // ------------------- ROUTES for register.hbs ------------------- //
 // GET
 app.get('/register', (req, res) => {
-    res.render('pages/register')
+    res.render('pages/register', {
+      user: user,
+    })
 });
 // POST
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
     const hash = await bcrypt.hash(req.body.password, 10);
-    const username = req.body.username;
-    const first_name = req.body.first_name;
-    const last_name = req.body.last_name;
-    const email = req.body.email;
+    user.username = req.body.username;
+    user.first_name = req.body.first_name;
+    user.last_name = req.body.last_name;
+    user.email = req.body.email;
     let birthday = new Date(req.body.birth_date);
-    const birth_date = birthday;
+    user.birth_date = birthday;
     const register_date = new Date().toJSON().slice(0, 10);
-    let reg_date = new Date(register_date);
-    let age = reg_date.getFullYear() - birthday.getFullYear();
+    user.reg_date = new Date(register_date);
+    let age = user.reg_date.getFullYear() - birthday.getFullYear();
     if (age< 21) {
         err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
         console.log(err);
         res.render('pages/register', {
           error: true,
           message: err,
+          user: user,
         });
         return;
     };
@@ -144,12 +147,12 @@ app.post('/register', async (req, res) => {
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
 
     db.none(query, [
-        username,
+        user.username,
         hash,
-        first_name,
-        last_name,
-        email,
-        birth_date,
+        user.first_name,
+        user.last_name,
+        user.email,
+        user.birth_date,
         register_date
     ])
         .then(
@@ -215,7 +218,8 @@ app.post('/register', async (req, res) => {
 const auth = (req, res, next) => {
   if (!req.session.user) {
     // Default to login page.
-    return res.redirect('/login');
+    message = "Please Login First!"
+    return res.redirect('/login?message=' + message);
   }
   next();
 };
@@ -531,6 +535,15 @@ app.get('/about', (req, res) => {
 
 // ------------------- ROUTES for logout.hbs ------------------- //
 app.get('/logout', (req, res) => {
+    user.user_id = undefined;
+    user.username = undefined;
+    user.password = undefined;
+    user.email = undefined;
+    user.first_name = undefined;
+    user.last_name = undefined;
+    user.birth_date = undefined;
+    user.register_date = undefined;
+    user.age = undefined;
     req.session.destroy();
     res.render('pages/logout', {
       message: 'Logged Out Successfully'
