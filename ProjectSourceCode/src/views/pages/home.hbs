@@ -52,39 +52,61 @@
     <div class="eligible-bets">
         <h2>Current Eligible Bets</h2>
         <table class="table">
-            {{#each event}}
                 <tr>
-                    <th>{{commence_time}}</th>
-                    <th>{{home_team}}</th>
-                    <th>{{away_team}}</th>
+                    <td colspan="2"></td>
+                    {{#each sportsbook}}
+                    <th>
+                        <form action="/bets/add" type="submit" method="post">
+                            <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../id}}'>
+                            <input type="hidden" class="form-control" id="time" name="time" value='{{../commence_time}}'>
+
+                            <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../home_team}}'>
+                            <input type="hidden" class="form-control" id="odds_a" name="odds_a" value='{{markets.[0].outcomes.[0].price}}'>
+
+                            <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../away_team}}'>
+                            <input type="hidden" class="form-control" id="odds_b" name="odds_b" value='{{markets.[0].outcomes.[1].price}}'>
+
+                            <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value='{{title}}'>
+
+                            <input type="hidden" class="form-contorl" id="bet_amount" name="bet_amount" value='{{bet_amount}}'>
+
+                            <button id="submit-button" type="submit" {{#when ../selection.sportsbook.sportsbook_name 'eq' sportsbook_name}}class="btn btn-primary"{{else}}class="btn btn-outline-secondary"{{/when}}>{{sportsbook_name}}</button>
+                        </form> 
+                    </th>
+                    {{/each}}
+
                 </tr>
-                {{#each bookmakers}}
-                        <tr  
-                        {{#if ../../selection.sportsbook}}
-                        {{#when ../../selection.sportsbook.sportsbook_name 'noteq' title}}style="display:none;"
-                        {{/when}}
-                        {{/if}}>
-                            <td>{{title}}</td>
-                            <td>{{markets.[0].outcomes.[0].price}}</td>
-                            <td>{{markets.[0].outcomes.[1].price}}</td>
-                            <td class="col-3">
-                                <form action="/bets/add" type="submit" method="post">
-                                    <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../id}}'>
-                                    <input type="hidden" class="form-control" id="time" name="time" value='{{../commence_time}}'>
-
-                                    <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../home_team}}'>
-                                    <input type="hidden" class="form-control" id="odds_a" name="odds_a" value='{{markets.[0].outcomes.[0].price}}'>
-
-                                    <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../away_team}}'>
-                                    <input type="hidden" class="form-control" id="odds_b" name="odds_b" value='{{markets.[0].outcomes.[1].price}}'>
-
-                                    <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value='{{title}}'>
-
-                                    <button id="submit-button" type="submit" class="btn btn-secondary">SELECT</button>
-                                </form>      
-                            </td>
-                        </tr>
-                {{/each}}
+                {{#each event}}
+                <tr>
+                    <th rowspan="2">{{commence_time}}</th>
+                    <th>{{home_team}}</th>
+                    {{#each ../sportsbook}}
+                        <td class="odds">
+                        {{#each ../bookmakers}}
+                            {{#when title 'eq' ../sportsbook_name}}
+                             <a id="odds" {{#when markets.[0].outcomes.[0].price 'gt' '0'}}class="btn btn-success"{{else}}class="btn btn-danger"{{/when}} data-bs-toggle="button">{{markets.[0].outcomes.[0].price}}</a>
+                            {{else}}
+                            {{/when}}
+                        {{/each}}
+                        </td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <th>{{away_team}}</th>
+                    {{#each ../sportsbook}}
+                        <td class="odds">
+                        {{#each ../bookmakers}}
+                            {{#when title 'eq' ../sportsbook_name}}
+                             <a id="odds" {{#when markets.[0].outcomes.[1].price 'gt' '0'}}class="btn btn-success"{{else}}class="btn btn-danger"{{/when}} data-bs-toggle="button">{{markets.[0].outcomes.[1].price}}</a>
+                            {{else}}
+                            {{/when}}
+                        {{/each}}
+                        </td>
+                    {{/each}}
+                </tr>
+                <tr>
+                    <td colspan="9"></td>
+                </tr>
             {{/each}}
         </table>
     </div>
