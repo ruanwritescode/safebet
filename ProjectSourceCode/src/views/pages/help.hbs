@@ -3,9 +3,17 @@
     <h1>Help Center</h1>
 </header>
 
+{{#when username 'eq' 'admin'}}
+<div id='inbox-container' style='width: 90%; margin: 30px; height: 500px'>
+  <i>Loading inbox...</i>
+</div>
+{{/when}}
+
+{{#when username 'noteq' 'admin'}}
 <div id='talkjs-container' style='width: 90%; margin: 30px; height: 500px'>
   <i>Loading chat...</i>
 </div>
+{{/when}}
 
 <script>
 (function(t,a,l,k,j,s){
@@ -15,37 +23,9 @@ s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.h
 </script>
 
 <script>
-if({{username}}=='admin'){//--------------admin view-----------------
+//--------------admin view-----------------
+{{#when username 'eq' 'admin'}}
 Talk.ready.then(function () {    
-    const user = new Talk.User({
-        id: 'admin',
-        name: 'admin',
-        email: 'jogi2895@colorado.edu',
-        photoUrl: 'http://orig06.deviantart.net/5991/f/2010/006/6/9/square_cat_by_bebebelkin.jpg',
-        role: 'admin',
-        welcomeMessage: 'How may I assist you?',
-      });
-
-    const inbox = session.createInbox();
-    inbox.mount(document.getElementById('inbox-container'));
-  });
-}
-else{//-----------------------------------user view-----------------------
-Talk.ready.then(function () {    
-    const user = new Talk.User({
-        id: {{username}},
-        name: {{first_name}},
-        email: {{email}},
-        photoUrl: 'https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png',
-        //welcomeMessage: 'Hi!',
-        role: 'user',
-      });
-    
-    const session = new Talk.Session({
-      appId: 'twPXuf7Y', // replace with your app ID
-      me: user,
-    });
-    
     const admin = new Talk.User({
         id: 'admin',
         name: 'admin',
@@ -55,16 +35,42 @@ Talk.ready.then(function () {
         welcomeMessage: 'How may I assist you?',
       });
 
-    const conversation = session.getOrCreateConversation('new_conversation');
-    conversation.setParticipant(user);
+    const session = new Talk.Session({
+      appId: 'twPXuf7Y', // replace with your app ID
+      me: admin
+    });
+
+    const inbox = session.createInbox();
+    inbox.mount(document.getElementById('inbox-container'));
+  });
+{{/when}}
+//--------------user view-----------------------
+{{#when username 'noteq' 'admin'}}
+Talk.ready.then(function () {    
+    const chatter = new Talk.User({
+        id: '{{username}}',
+        name: '{{first_name}}',
+        email: '{{email}}',
+        photoUrl: 'https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png',
+        role: 'user'
+      });
+    
+    const session = new Talk.Session({
+      appId: 'twPXuf7Y', // replace with your app ID
+      me: chatter
+    });
+    
+    const admin = new Talk.User('admin');
+
+    const conversation = session.getOrCreateConversation('{{username}}_conversation');
+    conversation.setParticipant(chatter);
     conversation.setParticipant(admin);
 
-    const chatbox = session.createChatbox();
+    const chatbox = session.createChatbox('{{username}}_conversation');
     chatbox.select(conversation);
     chatbox.mount(document.getElementById('talkjs-container'));
   });
-}
+{{/when}}
 </script>
-
 </body>
 </html>

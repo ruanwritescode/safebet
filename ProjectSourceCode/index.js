@@ -361,7 +361,11 @@ app.get('/profile', (req, res) => {
 // ------------------- ROUTES for help.hbs ------------------- //
 // GET
 app.get('/help', (req, res) => {
-  res.render('pages/help',{user: user,});
+  res.render('pages/help',{
+    username: req.session.user.username,
+    first_name: req.session.user.first_name,
+    email: req.session.user.email,
+  });
 });
 
 // ------------------- ROUTES for about.hbs ------------------- //
