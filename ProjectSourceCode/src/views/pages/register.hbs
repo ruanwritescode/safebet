@@ -1,35 +1,33 @@
-<div class="container w-30">
-        <h1>Register</h1>
-        <form action="/register" type="submit" method="POST">
-        <div>
-            <label for="username">Create Username</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Create Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <label for="first_name">First Name</label>
-            <input type="text" id="first_name" name="first_name">
-        </div>
-        <div>
-            <label for="last_name">Last Name</label>
-            <input type="text" id="last_name" name="last_name">
-        </div>
-        <div>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email">
-        </div>
-        <div>
-            <label for="birth_date">Birth date</label>
-            <input type="date" id="birth_date" name="birth_date">
-        </div>
-        <div>
-            <button type="submit">Register</button>
-        </div>
-        <div>
-            <p>Already have an account? <a href="/login">Login</a></p>
-        </div>
-        </form>
+<div class="container jumbotron mt-5 p-3 d-flex col-5 justify-content-center">
+        {{!-- <div class="row justify-content-md-center pl-5 pt-3 pb-3"> --}}
+            <div class="col-8">
+                <h1 class="text-center">Register</h1>
+                <form action="/register" type="submit" method="POST">
+
+                    <label for="username">Create Username</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="password">Create Password</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name">
+
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name">
+
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email">
+
+                    <label for="birth_date">Birth date</label>
+                    <input type="date" id="birth_date" name="birth_date">
+                    <div class="d-flex justify-content-end">
+                        <button class="m-2 w-5" type="submit">Register</button>   
+                    </div>
+                </form>
+                <div class="d-flex justify-content-center">
+                <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
+            </div>
+        {{!-- </div> --}}
 </div>
