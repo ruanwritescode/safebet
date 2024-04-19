@@ -92,6 +92,7 @@ const selection = {
   deal: undefined,
   sport: undefined,
   sport_key: undefined,
+  bet_amount: undefined,
 };
 
 const options = {
@@ -350,6 +351,7 @@ app.post('/home/odds', async (req, res) => {
       selection.deal = await db.oneOrNone('SELECT * FROM deals WHERE deal_id = $1',[req.body.deal]);
     };
     selection.sport = await db.one('SELECT * FROM sports WHERE sport_id = $1',[req.body.sport]);
+    selection.bet_amount = req.body.bet_amount
   }
   catch (err) {
     error = true;
@@ -474,12 +476,15 @@ app.post('/bets/add', async (req, res) => {
     await db.none(query_bet, [sb_id,event_id,odds_f,odds_n]);
     let bet_data = await db.any(check_bet,[sb_id,event_id]);
     await db.none('INSERT INTO userHistory (user_id, bet_id) VALUES ($1, $2)',[user.user_id,bet_data[0].bet_id]);
+    message = "Saved Bet To User History";
     res.render('pages/home', {
       event: events,
       selection: selection,
       sportsbook: options.sportsbooks,
       deal: options.deals,
       sport: options.sports,
+      message: message,
+      error: false,
     })
   }
   catch (error) {
