@@ -12,8 +12,8 @@ form > div {
 }
 form input {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 6px;
+    /* margin-top: 5px; */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -49,22 +49,13 @@ form button:hover {
 
 #odds {
     width: 80px;
-    height: 60px;
+    height: 40px;
     text-align: center;
-    padding: 17px 0;
-}
-
-td.odds {
-    text-align: center;
-}
-
-td {
-    padding: 0px;
-    margin: 0px;
+    padding: 7px 0;
 }
 
 /* div {
-    border: 5px solid black;
+    border: 1px solid grey;
 } */
 
 label {
@@ -76,4 +67,31 @@ button.login {
     width: 150px;
     margin-top: 15px;
     margin-bottom: 10px;
+}
+
+div.bets-selector div{
+    text-align: end;
+    align-content: start;
+    /* padding-top: 20px; */
+}
+
+div.bets, table.table {
+    border-radius: 20px;
+}
+
+tr.divider {
+    background-color: black;
+}
+
+table {
+    margin-top: 10px;
+    background-color: grey;
+    background: rgba(76, 175, 80, 0)
+}
+
+td, th {
+    border: 1px solid black;
+    margin: 0px;
+    padding-top: 0px;
+    text-align: center;
 }
