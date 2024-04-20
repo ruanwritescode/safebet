@@ -410,9 +410,11 @@ app.post('/bets/add', async (req, res) => {
   const check_event = 'SELECT * FROM events WHERE event_id = $1';
   const new_event = `INSERT INTO events (event_id, sport_id, team_f, team_n, event_date) VALUES ($1,$5,$2,$3,$4)`;
   const update_event = `UPDATE events SET team_f = $2, team_n = $3, event_date = $4 WHERE event_id = $1`;
+
   const check_bet = 'SELECT * FROM bets WHERE sportsbook_id = $1 AND event_id = $2';
-  const new_bet = `INSERT INTO bets (sportsbook_id, event_id, odds_f, odds_n, bet_value) VALUES ($1,$2,$3,$4,$5)`;
-  const update_bet = `UPDATE bets SET odds_f = $3, odds_n = $4, bet_value = $5 WHERE sportsbook_id = $1 AND event_id = $2;`
+  const new_bet = `INSERT INTO bets (sportsbook_id, event_id, odds_f, odds_n, bet_value, bet_team) VALUES ($1,$2,$3,$4,$5,$6)`;
+  const update_bet = `UPDATE bets SET odds_f = $3, odds_n = $4, bet_value = $5, bet_team = $6 WHERE sportsbook_id = $1 AND event_id = $2`;
+
   const check_hist = 'SELECT * FROM userHistory WHERE user_id = $1 AND bet_id = $2;'
 
   let query_event = '';
@@ -423,8 +425,8 @@ app.post('/bets/add', async (req, res) => {
   let sb_id = undefined;
 
   try {
-    if(!req.body.bet_amount) {
-      message = 'Please Enter a Bet Amount to Select a Bet';
+    if(!req.body) {
+      message = 'Error: No Data Found';
       throw new Error(message);
     }
     sb_id = await db.one('SELECT sportsbook_id FROM sportsbooks WHERE sportsbook_name = $1',[req.body.sportsbook]);
@@ -451,9 +453,13 @@ app.post('/bets/add', async (req, res) => {
     let team_n = undefined;
     let odds_f = undefined;
     let odds_n = undefined;
+    let bet_team = undefined;
     if(req.body.odds_a < 0){
       if(req.body.bet_team == 'a') {
-
+        bet_team = 'f';
+      }
+      else {
+        bet_team = 'n';
       }
       team_f = req.body.team_a;
       odds_f = req.body.odds_a;
@@ -461,6 +467,12 @@ app.post('/bets/add', async (req, res) => {
       odds_n = req.body.odds_b;
     }
     else {
+      if(req.body.bet_team == 'a') {
+        bet_team = 'n';
+      }
+      else {
+        bet_team = 'f';
+      }
       team_f = req.body.team_b;
       odds_f = req.body.odds_b;
       team_n = req.body.team_a;
@@ -468,7 +480,7 @@ app.post('/bets/add', async (req, res) => {
     }
 
     await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id]);
-    await db.none(query_bet, [sb_id,event_id,odds_f,odds_n,bet_amount]);
+    await db.none(query_bet, [sb_id,event_id,odds_f,odds_n,bet_amount,bet_team]);
     let bet_data = await db.any(check_bet,[sb_id,event_id]);
     if(!await db.any(check_hist,[user.user_id,bet_data[0].bet_id])) {
       await db.none('INSERT INTO userHistory (user_id, bet_id) VALUES ($1, $2)',[user.user_id,bet_data[0].bet_id]);
