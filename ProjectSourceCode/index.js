@@ -411,17 +411,16 @@ app.post('/bets/add', async (req, res) => {
   const new_event = `INSERT INTO events (event_id, sport_id, team_f, team_n, event_date) VALUES ($1,$5,$2,$3,$4)`;
   const update_event = `UPDATE events SET team_f = $2, team_n = $3, event_date = $4 WHERE event_id = $1`;
 
-  const check_bet = 'SELECT * FROM bets WHERE sportsbook_id = $1 AND event_id = $2';
-  const new_bet = `INSERT INTO bets (sportsbook_id, event_id, odds_f, odds_n, bet_value, bet_team) VALUES ($1,$2,$3,$4,$5,$6)`;
-  const update_bet = `UPDATE bets SET odds_f = $3, odds_n = $4, bet_value = $5, bet_team = $6 WHERE sportsbook_id = $1 AND event_id = $2`;
-
-  const check_hist = 'SELECT * FROM userHistory WHERE user_id = $1 AND bet_id = $2;'
+  const check_bet = 'SELECT * FROM bets WHERE sportsbook_id = $1 AND event_id = $2 AND user_id = $3';
+  const new_bet = `INSERT INTO bets (user_id, sportsbook_id, event_id, odds_f, odds_n, bet_team, deal_id, bet_value) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`;
+  const update_bet = `UPDATE bets SET odds_f = $4, odds_n = $5, bet_team = $6, deal_id = $7, bet_value = $8 WHERE sportsbook_id = $2 AND event_id = $3 AND user_id = $1`;
 
   let query_event = '';
   let query_bet = '';
   const event_id = req.body.event_id;
   const event_date = req.body.time;
   const bet_amount = req.body.bet_amount;
+  const deal_id = req.body.deal_id;
   let sb_id = undefined;
 
   try {
@@ -432,8 +431,8 @@ app.post('/bets/add', async (req, res) => {
     sb_id = await db.one('SELECT sportsbook_id FROM sportsbooks WHERE sportsbook_name = $1',[req.body.sportsbook]);
     sb_id = sb_id.sportsbook_id;
     let exists_event = await db.any(check_event, [event_id]);
-    let exists_bet = await db.any(check_bet,[sb_id,event_id]);
-    console.log(exists_bet,sb_id,req.body.sportsbook);
+    let exists_bet = await db.any(check_bet,[sb_id,event_id,user.user_id]);
+
     if(exists_event[0]) {
       query_event = update_event;
     }
@@ -479,12 +478,9 @@ app.post('/bets/add', async (req, res) => {
       odds_n = req.body.odds_a;
     }
 
-    await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id]);
-    await db.none(query_bet, [sb_id,event_id,odds_f,odds_n,bet_amount,bet_team]);
-    let bet_data = await db.any(check_bet,[sb_id,event_id]);
-    if(!await db.any(check_hist,[user.user_id,bet_data[0].bet_id])) {
-      await db.none('INSERT INTO userHistory (user_id, bet_id) VALUES ($1, $2)',[user.user_id,bet_data[0].bet_id]);
-    }
+    await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id,user.user_id]);
+    await db.none(query_bet, [user.user_id,sb_id,event_id,odds_f,odds_n,bet_team,deal_id,bet_amount]);
+
     res.render('pages/home', {
       event: events,
       selection: selection,
@@ -512,7 +508,7 @@ app.post('/bets/add', async (req, res) => {
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
 app.get('/profile', async (req, res) => {
-  const user_hist_query = 'SELECT * FROM userHistory uh INNER JOIN bets b ON uh.bet_id = b.bet_id INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id WHERE uh.user_id = $1'
+  const user_hist_query = 'SELECT * FROM bets b INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id WHERE b.user_id = $1'
   try {
     userHist = await db.any(user_hist_query,[user.user_id]);
     res.render('pages/profile', {

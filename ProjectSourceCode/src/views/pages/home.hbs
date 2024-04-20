@@ -55,7 +55,7 @@
                 <tr>
                     <td></td>
                     {{#each sportsbook}}
-                    <th class="sportbook">
+                    <th class="sportbook odds">
                         <a{{#when ../selection.sportsbook.sportsbook_name 'eq' sportsbook_name}}class="btn btn-primary"{{else}}class="btn btn-outline-secondary"{{/when}}>{{sportsbook_name}}</a>
                     </th>
                     {{/each}}
@@ -83,6 +83,7 @@
 
                                     <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value='{{title}}'>
 
+                                    <input type="hidden" class="form-control" id="deal_id" name="deal_id" value='{{../../../selection.deal.deal_id}}'>
                                     <input type="hidden" class="form-control" id="bet_amount" name="bet_amount" value='{{../../../selection.bet_amount}}'>
 
                                     <input type="hidden" class="form-control" id="bet_team" name="bet_team" value='a'>
@@ -114,6 +115,7 @@
 
                                     <input type="hidden" class="form-control" id="sportsbook" name="sportsbook" value='{{title}}'>
 
+                                    <input type="hidden" class="form-control" id="deal_id" name="deal_id" value='{{../../../selection.deal.deal_id}}'>
                                     <input type="hidden" class="form-contorl" id="bet_amount" name="bet_amount" value='{{../../../selection.bet_amount}}'>
 
                                     <input type="hidden" class="form-control" id="bet_team" name="bet_team" value='b'>
