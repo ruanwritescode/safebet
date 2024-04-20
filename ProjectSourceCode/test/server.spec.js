@@ -179,6 +179,8 @@ describe('Testing Place Bet API', () => {
 // Positive Test case (The users past bets are pulled and displayed on the page correctly)
 // Negative Test case (Select a bet and don't submit the bet (which should not store the bet in the user profile)
 
+// Test push
+
 describe('Past bets are pulled', () => {
   it('Positive : /add_user', done => {
     chai
