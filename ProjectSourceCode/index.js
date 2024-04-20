@@ -342,21 +342,27 @@ app.get('/home/sports', async (req, res) => {
 
 app.post('/home/odds', async (req, res) => {
   try {
+    message = "Please Make All Required Selections";
+    selection.bet_amount = req.body.bet_amount
     if(req.body.sportsbook) {
       selection.sportsbook = await db.oneOrNone('SELECT * FROM sportsbooks WHERE sportsbook_id = $1',[req.body.sportsbook]);
     }
     else {
       selection.sportsbook = undefined;
     };
+    selection.sport = await db.one('SELECT * FROM sports WHERE sport_id = $1',[req.body.sport]);
     if(req.body.deal) {
       selection.deal = await db.oneOrNone('SELECT * FROM deals WHERE deal_id = $1',[req.body.deal]);
-    };
-    selection.sport = await db.one('SELECT * FROM sports WHERE sport_id = $1',[req.body.sport]);
-    selection.bet_amount = req.body.bet_amount
+    }
+    else {
+      selection.deal = undefined;
+    } 
+    if(selection.deal.deal_type != 'Free Bet') {
+      message = 'Sorry, functionality is only limited to Free Bets at the moment';
+      throw new Error(message);
+    }
   }
   catch (err) {
-    error = true;
-    message = "Please Make All Required Selections";
     res.render('pages/home', {
       event: events,
       selection: selection,
@@ -364,6 +370,7 @@ app.post('/home/odds', async (req, res) => {
       deal: options.deals,
       sport: options.sports,
       message: message,
+      error: true,
     });
     return;
   }
@@ -390,6 +397,87 @@ app.post('/home/odds', async (req, res) => {
     console.log('Remaining requests',response.headers['x-requests-remaining']);
     console.log('Used requests',response.headers['x-requests-used']);
     events = response.data;
+    
+    // The ALGORITHM
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      for (let j = 0; j < event.bookmakers.length; j++) {
+        const bookmaker = event.bookmakers[j];
+        if(bookmaker.title == selection.sportsbook.sportsbook_name) {
+          if(bookmaker.markets[0].outcomes[0].price > 0 && bookmaker.markets[0].outcomes[1].price < 0) {
+            event.p = bookmaker.markets[0].outcomes[0].price;
+            bookmaker.bet_team = 'a'
+            bookmaker.home = 'btn btn-success'
+            bookmaker.away = 'btn btn-outline-danger disabled'
+          }
+          else if(bookmaker.markets[0].outcomes[1].price > 0 && bookmaker.markets[0].outcomes[0].price < 0) {
+            event.p = bookmaker.markets[0].outcomes[1].price;
+            bookmaker.bet_team = 'b'
+            bookmaker.away = 'btn btn-success'
+            bookmaker.home = 'btn btn-outline-danger disabled'
+          }
+          else {
+            bookmaker.valid = 0;
+            bookmaker.home = 'btn btn-outline-secondary disabled'
+            bookmaker.away = 'btn btn-outline-secondary disabled'
+          }
+          bookmaker.bet = event.p;
+        }
+      }
+      console.log(event.p);
+      for (let j = 0; j < event.bookmakers.length; j++) {
+        const bookmaker = event.bookmakers[j];
+        let n = undefined;
+        if((bookmaker.title != selection.sportsbook.sportsbook_name)) {
+          if(bookmaker.markets[0].outcomes[0].price < 0 && bookmaker.markets[0].outcomes[1].price > 0) {
+            n = bookmaker.markets[0].outcomes[0].price;
+            bookmaker.bet_team = 'a'
+            bookmaker.home = 'btn btn-danger'
+            bookmaker.away = 'btn btn-outline-success disabled'
+          }
+          else if(bookmaker.markets[0].outcomes[1].price < 0 && bookmaker.markets[0].outcomes[0].price > 0) {
+            n = bookmaker.markets[0].outcomes[1].price;
+            bookmaker.bet_team = 'b'
+            bookmaker.away = 'btn btn-danger'
+            bookmaker.home = 'btn btn-outline-success disabled'
+          }
+          else {
+            bookmaker.valid = 0;
+            bookmaker.home = 'btn btn-outline-secondary disabled'
+            bookmaker.away = 'btn btn-outline-secondary disabled'
+          }
+          bookmaker.bet = n;
+          let u = selection.bet_amount;
+          let p = event.p;
+          n = Math.abs(n)
+          bookmaker.hedge = ((u * p * n)/(100*(100+n))).toFixed(2);
+          bookmaker.ratio = ((p)/(n + 100));
+          bookmaker.winnings = (bookmaker.ratio * selection.bet_amount).toFixed(2);
+          
+        }
+      }
+      event.statics = [];
+      for (let j = 0; j < options.sportsbooks.length; j++) {
+        const static = options.sportsbooks[j];
+        let exists = false;
+        for (let k = 0; k < event.bookmakers.length; k++) {
+          const dynamic = event.bookmakers[k];
+          if(static.sportsbook_name == dynamic.title) {
+            exists = true;
+            event.statics.push(dynamic);
+          }
+        }
+        if(!exists) {
+          const placeholder = {
+            title: static.sportsbook_name,
+          };
+          event.statics.push(placeholder);
+        }
+      }
+      
+    }
+    // console.log(events[0].statics);
+
     res.render('pages/home', {
       event: events,
       selection: selection,
@@ -409,36 +497,54 @@ app.post('/home/odds', async (req, res) => {
 app.post('/bets/add', async (req, res) => {
   const check_event = 'SELECT * FROM events WHERE event_id = $1';
   const new_event = `INSERT INTO events (event_id, sport_id, team_f, team_n, event_date) VALUES ($1,$5,$2,$3,$4)`;
-  const update_event = `UPDATE events SET team_f = $2, team_n = $3, event_date = $4 WHERE event_id = $1`;
+  // const update_event = `UPDATE events SET team_f = $2, team_n = $3, event_date = $4 WHERE event_id = $1`;
 
-  const check_bet = 'SELECT * FROM bets WHERE sportsbook_id = $1 AND event_id = $2 AND user_id = $3';
-  const new_bet = `INSERT INTO bets (user_id, sportsbook_id, event_id, odds_f, odds_n, bet_team, deal_id, bet_value) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`;
-  const update_bet = `UPDATE bets SET odds_f = $4, odds_n = $5, bet_team = $6, deal_id = $7, bet_value = $8 WHERE sportsbook_id = $2 AND event_id = $3 AND user_id = $1`;
+  const check_bet = 'SELECT * FROM bets WHERE user_id = $1 AND event_id = $2 AND deal_id = $3 AND hedge_id = $4 ';
+  const new_bet = `INSERT INTO bets (user_id, event_id, deal_id, hedge_id, winnings) VALUES ($1,$2,$3,$4,$5)`;
+  // const update_bet = `UPDATE bets SET odds_f = $4, odds_n = $5, bet_team = $6, deal_id = $7, bet_value = $8 WHERE sportsbook_id = $2 AND event_id = $3 AND user_id = $1`;
+
+  const check_deal = 'SELECT deal_id FROM deals WHERE sportsbook_id = $1 AND deal_type = $2 AND deal_amount = $3 AND deal_line = $4'
+  const new_deal = 'INSERT INTO deals (sportsbook_id, deal_type, deal_amount, deal_line) VALUES ($1,$2,$3,$4)'
+
+  const check_hedge = 'SELECT hedge_id FROM hedges WHERE sportsbook_id = $1 AND hedge_amount = $2 AND hedge_line = $3'
+  const new_hedge = 'INSERT INTO hedges (sportsbook_id, hedge_amount, hedge_line) VALUES ($1,$2,$3)'
 
   let query_event = '';
   let query_bet = '';
-  const event_id = req.body.event_id;
+  const event_id = req.body.event_id;  
   const event_date = req.body.time;
   const bet_amount = req.body.bet_amount;
   const deal_id = req.body.deal_id;
-  let sb_id = undefined;
+  const hedge_id = req.body.hedge_id;
+  let sb_deal_id = req.body.sb_deal_id;
+  let sb_hedge_id = req.body.sb_hedge_id;
+
+  let team_f = undefined;
+  let team_n = undefined;
+  let bet_team = undefined;
+  if(req.body.odds_a < 0){
+    team_f = req.body.team_a;
+    team_n = req.body.team_b;
+  }
+  else {
+    team_f = req.body.team_b;
+    team_n = req.body.team_a;
+  }
 
   try {
     if(!req.body) {
       message = 'Error: No Data Found';
       throw new Error(message);
     }
-    sb_id = await db.one('SELECT sportsbook_id FROM sportsbooks WHERE sportsbook_name = $1',[req.body.sportsbook]);
-    sb_id = sb_id.sportsbook_id;
+    
+    // Check if event already exists in database. Add if not.
     let exists_event = await db.any(check_event, [event_id]);
-    let exists_bet = await db.any(check_bet,[sb_id,event_id,user.user_id]);
+    if(!exists_event[0]) {
+      await db.none(new_event,[event_id,sport_id,team_f,team_n,event_date])
+    }
+    let exists_deal = await db.any(check_deal, [sb_deal_id,deal_id])
+    let exists_bet = await db.any(check_bet,[user.user_id,event_id,deal_id,hedge_id]);
 
-    if(exists_event[0]) {
-      query_event = update_event;
-    }
-    else {
-      query_event = new_event;
-    }
     if(exists_bet[0]) {
       query_bet = update_bet;
       message = "This Bet Already Exists In Your History and Has Been Updated With Current Odds";
@@ -446,36 +552,6 @@ app.post('/bets/add', async (req, res) => {
     else {
       query_bet = new_bet;
       message = "Saved Bet To User History";
-    }
-
-    let team_f = undefined;
-    let team_n = undefined;
-    let odds_f = undefined;
-    let odds_n = undefined;
-    let bet_team = undefined;
-    if(req.body.odds_a < 0){
-      if(req.body.bet_team == 'a') {
-        bet_team = 'f';
-      }
-      else {
-        bet_team = 'n';
-      }
-      team_f = req.body.team_a;
-      odds_f = req.body.odds_a;
-      team_n = req.body.team_b;
-      odds_n = req.body.odds_b;
-    }
-    else {
-      if(req.body.bet_team == 'a') {
-        bet_team = 'n';
-      }
-      else {
-        bet_team = 'f';
-      }
-      team_f = req.body.team_b;
-      odds_f = req.body.odds_b;
-      team_n = req.body.team_a;
-      odds_n = req.body.odds_a;
     }
 
     await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id,user.user_id]);
@@ -580,4 +656,8 @@ Handlebars.registerHelper( "when",function(operand_1, operator, operand_2, optio
 
   if (result) return options.fn(this);
   else  return options.inverse(this);
+});
+
+Handlebars.registerHelper( "setVariable", function(varName, varValue, options){
+  options.data.root[varName] = varValue;
 });
