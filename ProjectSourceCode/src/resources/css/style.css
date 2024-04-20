@@ -80,15 +80,17 @@ div.bets, table.table {
 }
 
 td.divider {
-    background-color: rgb(230,234,237);
+    background-color: rgb(233,236,239);
     border-left: 0px;
     border-right: 0px;
+    padding: 15px;
+    height: 80px;
 }
 
-table {
-    margin-top: 10px;
-    background-color: grey;
-    background: rgba(76, 175, 80, 0)
+table td.space, table th.sportsbook {
+    background-color: rgb(233,236,239);
+    border-top:0px;
+    border-bottom:0px;
 }
 
 td, th {
@@ -108,19 +110,30 @@ table th.odds {
     vertical-align: middle;
 }
 
-th.sportbook button {
+table th.sportsbook {
+    padding:0px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th.sportsbook button {
     width: 120px;
     height: 40px;
     text-align: center;
+    margin-top:0px;
+    margin-bottom:0px;
 }
 
-table td.divider {
-    padding: 15px;
-    height: 80px;
+td.options {
+    background-color: rgb(243,246,249);
 }
 button.select {
     padding:0px;
     width:120px;
     height:25px;
     margin-top:5px;
+}
+
+span.label {
+    font-weight: bold;
 }

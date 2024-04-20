@@ -351,16 +351,11 @@ app.post('/home/odds', async (req, res) => {
       selection.sportsbook = undefined;
     };
     selection.sport = await db.one('SELECT * FROM sports WHERE sport_id = $1',[req.body.sport]);
-    if(req.body.deal) {
-      selection.deal = await db.oneOrNone('SELECT * FROM deals WHERE deal_id = $1',[req.body.deal]);
-    }
-    else {
-      selection.deal = undefined;
-    } 
-    if(selection.deal.deal_type != 'Free Bet') {
-      message = 'Sorry, functionality is only limited to Free Bets at the moment';
-      throw new Error(message);
-    }
+    selection.deal = req.body.deal;
+    // if(selection.deal.deal_type != 'Free Bet') {
+    //   message = 'Sorry, functionality is only limited to Free Bets at the moment';
+    //   throw new Error(message);
+    // }
   }
   catch (err) {
     res.render('pages/home', {

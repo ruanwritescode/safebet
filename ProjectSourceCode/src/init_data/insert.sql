@@ -23,11 +23,6 @@ INSERT INTO sportsbooks (sportsbook_name,sportsbook_url)
     ('MyBookie.ag','https://www.mybookie.ag'),
     ('BetUS','https://betusa.online/');
 
-INSERT INTO deals (deal_type)
-    VALUES
-    ('Free Bet'),
-    ('Risk-Free Bet');
-
 -- INSERT INTO bets (event_id, bet_value, winnings, deal_id)
 --     VALUES
 --     ('adcea12351d134ar1', 123.2, 4123, 1),
