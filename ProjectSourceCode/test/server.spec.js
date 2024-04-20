@@ -129,3 +129,66 @@ describe('Testing Place Bet API', () => {
       });
   });
 });
+
+// **********************Unit Testcase: Chatbot Help *******************************
+// Positive test case 1: Sending a non-empty message to chatbot 
+describe('Interacting with the Chatbot', () => {
+  it('Sends a non-empty message to the chatbot', done => {
+    chai
+    .request(server)
+    .post('/chat')
+    .send({
+      message: 'Hi, I need help with placing a bet.'
+    })
+    .end((err, res) => {
+      expect(res).to.have.status(200);
+      expect(res.text).to.include('Message recieved successfully by chatbot');
+      done();
+    });
+  });
+});
+
+// Negative test case 1: Sending a empty message to the chatbot
+describe('Interacting with the chatbot', () => {
+  it('Sends an empty meassage to the chatbot', done => {
+    chai
+    .request(server)
+    .post('/chat')
+    .send({
+      message: ''
+    })
+    .end((err,res) => {
+      expect(res).to.have.status(400);
+      expect(res.text).to.include('Message cannot be empty');
+      done();
+    });
+  });
+});
+
+// Postive test case 2: loading the Chatbot successfully
+describe('Loading chatbot', () => {
+  it('Load chabot successfully on page', done => {
+    chai
+    .request(server)
+    .get('/help')
+    .end((err, res) => {
+      expect(res).to.have.status(200);
+      expect(res.text).to.include('Loading chat...');
+      done();
+    })
+  })
+})
+
+// Negative test case 2: loading the Chatbot unsuccessfully
+describe('Loading chatbot', () => {
+  it('Fail to load chatbot', done => {
+    chai
+    .request(server)
+    .get('/help')
+    .end((err,res) => {
+      expect(res).to.have.status(404); // 404 error code is error for webpage not loading 
+      expect(res.text).to.include('Failed to load chat');
+      done();
+    });
+  });
+});
