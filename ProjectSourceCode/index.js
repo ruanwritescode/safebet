@@ -537,6 +537,12 @@ app.get('/help', (req, res) => {
 
 // ------------------- ROUTES for about.hbs ------------------- //
 // GET
+app.get('/faq', (req, res) => {
+  res.render('pages/faq');
+});
+
+// ------------------- ROUTES for about.hbs ------------------- //
+// GET
 app.get('/about', (req, res) => {
   res.render('pages/about');
 });
