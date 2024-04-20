@@ -129,3 +129,120 @@ describe('Testing Place Bet API', () => {
       });
   });
 });
+
+
+// *********************** Test Case profile.hbs  **************************
+
+// Positive Test case
+
+// Negative Test case
+
+
+
+
+
+
+
+// *********************** Test Case about.hbs  **************************
+
+// Positive Test case
+
+// Negative Test case
+
+// *********************** Test Case help.hbs  **************************
+
+// Positive Test case
+
+// Negative Test case
+
+// *********************** Test Case home.hbs  **************************
+
+// Positive Test case
+
+// Negative Test case
+
+// *********************** Test Case login.hbs  **************************
+
+// Forgot password
+
+// Create an account
+
+// Positive Test case
+
+// Negative Test case
+
+
+
+// *********************** Test Case logout.hbs  **************************
+
+// Positive Test case (Input a valid email address stored in the database)
+// Negative Test case (Invalid input for email address that is not stored in database)
+
+describe('Past bets are pulled', () => {
+  it('Positive : /add_user', done => {
+    chai
+      .request(server)
+      .post('/add_user')
+      .send({id: 5, name: 'John Doe', dob: '2020-02-20'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Success');
+        done();
+      });
+  });
+
+  it('Negative : /add_user. Bets are not submitted', done => {
+    chai
+      .request(server)
+      .post('/add_user')
+      .send({id: '5', name: 10, dob: '2020-02-20'})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equals('Invalid input');
+        done();
+      });
+  });
+});
+
+
+// *********************** Test Case profile.hbs  **************************
+
+// Positive Test case (The users past bets are pulled and displayed on the page correctly)
+// Negative Test case (Select a bet and don't submit the bet (which should not store the bet in the user profile)
+
+describe('Past bets are pulled', () => {
+  it('Positive : /add_user', done => {
+    chai
+      .request(server)
+      .post('/add_user')
+      .send({id: 5, name: 'John Doe', dob: '2020-02-20'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Success');
+        done();
+      });
+  });
+
+  it('Negative : /add_user. Bets are not submitted', done => {
+    chai
+      .request(server)
+      .post('/add_user')
+      .send({id: '5', name: 10, dob: '2020-02-20'})
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equals('Invalid input');
+        done();
+      });
+  });
+});
+
+
+
+
+// *********************** Test Case register.hbs  **************************
+
+// Positive Test case (the user is over, exactly, or under the age verification of 18)
+// Negative Test case (Input of a future year like 2050)
+
+// DONE line 37
+ 
