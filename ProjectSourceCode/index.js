@@ -235,6 +235,7 @@ app.get('/home', async (req,res) => {
     deal: undefined,
     sport: undefined,
     sport_key: undefined,
+    bet_amount: undefined,
   };
   const sportsbook_query = 'SELECT * FROM sportsbooks';
   const deal_query = 'SELECT * FROM deals';
@@ -409,38 +410,28 @@ app.post('/bets/add', async (req, res) => {
   const check_event = 'SELECT * FROM events WHERE event_id = $1';
   const new_event = `INSERT INTO events (event_id, sport_id, team_f, team_n, event_date) VALUES ($1,$5,$2,$3,$4)`;
   const update_event = `UPDATE events SET team_f = $2, team_n = $3, event_date = $4 WHERE event_id = $1`;
-  const check_bet = 'SELECT * FROM bets WHERE sportsbook_id = $1 AND event_id = $2';
-  const new_bet = `INSERT INTO bets (sportsbook_id, event_id, odds_f, odds_n) VALUES ($1,$2,$3,$4)`;
-  const update_bet = `UPDATE bets SET odds_f = $3, odds_n = $4 WHERE sportsbook_id = $1 AND event_id = $2`
+
+  const check_bet = 'SELECT * FROM bets WHERE sportsbook_id = $1 AND event_id = $2 AND user_id = $3';
+  const new_bet = `INSERT INTO bets (user_id, sportsbook_id, event_id, odds_f, odds_n, bet_team, deal_id, bet_value) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`;
+  const update_bet = `UPDATE bets SET odds_f = $4, odds_n = $5, bet_team = $6, deal_id = $7, bet_value = $8 WHERE sportsbook_id = $2 AND event_id = $3 AND user_id = $1`;
 
   let query_event = '';
   let query_bet = '';
   const event_id = req.body.event_id;
   const event_date = req.body.time;
+  const bet_amount = req.body.bet_amount;
+  const deal_id = req.body.deal_id;
   let sb_id = undefined;
 
   try {
+    if(!req.body) {
+      message = 'Error: No Data Found';
+      throw new Error(message);
+    }
     sb_id = await db.one('SELECT sportsbook_id FROM sportsbooks WHERE sportsbook_name = $1',[req.body.sportsbook]);
-  }
-  catch (error) {
-    console.log(error);
-    message = "We're Sorry, " + req.body.sportsbook + " Is Currently Not Supported On Safebet";
-    res.render('pages/home', {
-      event: events,
-      selection: selection,
-      sportsbook: options.sportsbooks,
-      deal: options.deals,
-      sport: options.sports,
-      message: message,
-      error: true,
-    });
-    return;
-  }
-
-  try {
     sb_id = sb_id.sportsbook_id;
     let exists_event = await db.any(check_event, [event_id]);
-    let exists_bet = await db.any(check_bet,[sb_id,event_id]);
+    let exists_bet = await db.any(check_bet,[sb_id,event_id,user.user_id]);
 
     if(exists_event[0]) {
       query_event = update_event;
@@ -450,33 +441,46 @@ app.post('/bets/add', async (req, res) => {
     }
     if(exists_bet[0]) {
       query_bet = update_bet;
+      message = "This Bet Already Exists In Your History and Has Been Updated With Current Odds";
     }
     else {
       query_bet = new_bet;
+      message = "Saved Bet To User History";
     }
 
     let team_f = undefined;
     let team_n = undefined;
     let odds_f = undefined;
     let odds_n = undefined;
+    let bet_team = undefined;
     if(req.body.odds_a < 0){
+      if(req.body.bet_team == 'a') {
+        bet_team = 'f';
+      }
+      else {
+        bet_team = 'n';
+      }
       team_f = req.body.team_a;
       odds_f = req.body.odds_a;
       team_n = req.body.team_b;
       odds_n = req.body.odds_b;
     }
     else {
+      if(req.body.bet_team == 'a') {
+        bet_team = 'n';
+      }
+      else {
+        bet_team = 'f';
+      }
       team_f = req.body.team_b;
       odds_f = req.body.odds_b;
       team_n = req.body.team_a;
       odds_n = req.body.odds_a;
     }
 
-    await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id]);
-    await db.none(query_bet, [sb_id,event_id,odds_f,odds_n]);
-    let bet_data = await db.any(check_bet,[sb_id,event_id]);
-    await db.none('INSERT INTO userHistory (user_id, bet_id) VALUES ($1, $2)',[user.user_id,bet_data[0].bet_id]);
-    message = "Saved Bet To User History";
+    await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id,user.user_id]);
+    await db.none(query_bet, [user.user_id,sb_id,event_id,odds_f,odds_n,bet_team,deal_id,bet_amount]);
+
     res.render('pages/home', {
       event: events,
       selection: selection,
@@ -489,7 +493,6 @@ app.post('/bets/add', async (req, res) => {
   }
   catch (error) {
     console.log(error);
-    message = "Could Not Add Event To Database";
     res.render('pages/home', {
       event: events,
       selection: selection,
@@ -505,7 +508,7 @@ app.post('/bets/add', async (req, res) => {
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
 app.get('/profile', async (req, res) => {
-  const user_hist_query = 'SELECT * FROM userHistory uh INNER JOIN bets b ON uh.bet_id = b.bet_id INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id WHERE uh.user_id = $1'
+  const user_hist_query = 'SELECT * FROM bets b INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id WHERE b.user_id = $1'
   try {
     userHist = await db.any(user_hist_query,[user.user_id]);
     res.render('pages/profile', {
@@ -530,6 +533,12 @@ app.get('/help', (req, res) => {
     first_name: req.session.user.first_name,
     email: req.session.user.email,
   });
+});
+
+// ------------------- ROUTES for about.hbs ------------------- //
+// GET
+app.get('/faq', (req, res) => {
+  res.render('pages/faq');
 });
 
 // ------------------- ROUTES for about.hbs ------------------- //

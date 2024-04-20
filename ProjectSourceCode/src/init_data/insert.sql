@@ -26,10 +26,7 @@ INSERT INTO sportsbooks (sportsbook_name,sportsbook_url)
 INSERT INTO deals (deal_type)
     VALUES
     ('Free Bet'),
-    ('Risk-Free Bet'),
-    ('Bet Credits'),
-    ('One-Off Match Bonus'),
-    ('Deposit Match');
+    ('Risk-Free Bet');
 
 -- INSERT INTO bets (event_id, bet_value, winnings, deal_id)
 --     VALUES

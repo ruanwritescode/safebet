@@ -37,30 +37,22 @@ CREATE TABLE IF NOT EXISTS events (
 
 CREATE TABLE IF NOT EXISTS deals (
     deal_id SERIAL PRIMARY KEY,
-    sportsbook_id INT,
-    deal_type VARCHAR(24) NOT NULL,
-    amount DECIMAL(15,2),
-    FOREIGN KEY (sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
+    deal_type VARCHAR(24) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS bets (
     bet_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
     sportsbook_id INT NOT NULL,
     event_id VARCHAR(32) NOT NULL,
     odds_f INT NOT NULL,
     odds_n INT NOT NULL,
+    bet_team CHAR(1) NOT NULL,
     deal_id INT,
     bet_value DECIMAL(15,2),
     winnings DECIMAL(15,2),
+    FOREIGN KEY(user_id) REFERENCES users(user_id),
     FOREIGN KEY(event_id) REFERENCES events(event_id),
     FOREIGN KEY(deal_id) REFERENCES deals(deal_id),
     FOREIGN KEY(sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
-);
-
-CREATE TABLE IF NOT EXISTS userHistory (
-    user_id INT NOT NULL,
-    bet_id INT NOT NULL,
-    PRIMARY KEY(user_id, bet_id),
-    FOREIGN KEY(user_id) REFERENCES users(user_id),
-    FOREIGN KEY(bet_id) REFERENCES bets(bet_id)
 );
