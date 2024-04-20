@@ -1,24 +1,78 @@
-    <div id="app" class="container mt-5">
-        <div class="jumbotron">
-            <h1 class="display-4">Safebet</h1>
-            <p class="lead">Safebet is a software designed to make sports betting safer by providing reliable data analysis and risk management tools.</p>
-            <hr class="my-4">
-            <p>Our mission is to ensure that users engage in sports betting responsibly and with confidence.</p>
-        </div>
+<div id="app" class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Safebet</h1>
+        <p class="lead">Safebet is a software designed to make sports betting safer by providing reliable data analysis and risk management tools.</p>
+        <hr class="my-4">
+        <p>Our mission is to ensure that users engage in sports betting responsibly and with confidence.</p>
+    </div>
 
-        <h2 class="text-center mb-4">Meet the Team</h2>
-        <div class="row">
-            <div class="col-md-4" v-for="(member, index) in team" :key="index">
-                <div class="card team-card">
-                    <img :src="member.image" class="card-img-top" alt="Profile Picture">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ member.name }}</h5>
-                        <p class="card-text">{{ member.description }}</p>
-                    </div>
+    <h2 class="text-center mb-4">Meet the Team</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card team-card" v-show="selectedMember === 'Ruan Abarbanel'">
+                <img src="profile pictures/ruan_Abarbanel.jpeg" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">Ruan Abarbanel</h5>
+                    <p class="card-text">Software Engineer</p>
+                </div>
+            </div>
+            <!-- Add more team member cards here -->
+            <div class="card team-card" v-show="selectedMember === 'Joshua Gildred'">
+                <img src="profile pictures/josh_gildred.jpg" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">Joshua Gildred</h5>
+                    <p class="card-text">Software Engineer</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card team-card" v-show="selectedMember === 'Rohan Adepu'">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">Rohan Adepu</h5>
+                    <p class="card-text">Software Engineer</p>
+                </div>
+            </div>
+            <!-- Add more team member cards here -->
+            <div class="card team-card" v-show="selectedMember === 'Chasen Goren'">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">Chasen Goren</h5>
+                    <p class="card-text">Software Engineer</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card team-card" v-show="selectedMember === 'Robiel Kennedy'">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">Robiel Kennedy</h5>
+                    <p class="card-text">Software Engineer</p>
+                </div>
+            </div>
+            <!-- Add more team member cards here -->
+            <div class="card team-card" v-show="selectedMember === 'Aaron Van'">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Profile Picture">
+                <div class="card-body">
+                    <h5 class="card-title">Aaron Van</h5>
+                    <p class="card-text">Software Engineer</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    
-
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            selectedMember: 'Ruan Abarbanel' // Initialize selectedMember to the first team member
+            selectedMember: 'Rohan Adepu' // Initialize selectedMember to the first team member
+            selectedMember: 'Joshua Gildred' // Initialize selectedMember to the first team member
+            selectedMember: 'Chasen Goren' // Initialize selectedMember to the first team member
+            selectedMember: 'Robiel Kennedy' // Initialize selectedMember to the first team member
+            selectedMember: 'Aaron Van' // Initialize selectedMember to the first team member
+            
+        }
+    });
+</script>
