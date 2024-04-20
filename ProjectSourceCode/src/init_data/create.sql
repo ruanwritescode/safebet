@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS bets (
     event_id VARCHAR(32) NOT NULL,
     odds_f INT NOT NULL,
     odds_n INT NOT NULL,
+    bet_team CHAR(1) NOT NULL,
     deal_id INT,
     bet_value DECIMAL(15,2),
     winnings DECIMAL(15,2),
