@@ -12,20 +12,20 @@ form > div {
 }
 form input {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
+    /* padding: 6px; */
+    /* margin-top: 5px; */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 form button {
-    width: 30%;
-    padding: 8px;
+    /* width: 30%; */
+    /* padding: 8px; */
     background-color: #007bff; 
     color: white;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 5px;
+    border-radius: 10px;
+    /* cursor: pointer; */
+    /* margin-top: 5px; */
 }
 form button:hover {
     background-color: #0056b3;
@@ -45,4 +45,73 @@ form button:hover {
 .team-card img {
     width: 100%;
     height: auto;
+}
+
+button#odds {
+    width: 80px;
+    height: 40px;
+    text-align: center;
+    /* padding: 7px 0; */
+}
+
+/* div {
+    border: 1px solid grey;
+} */
+
+label {
+    padding-bottom: 0px;
+    margin-top: 8px;
+}
+
+button.login {
+    width: 150px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+div.bets-selector div{
+    text-align: end;
+    align-content: start;
+    /* padding-top: 20px; */
+}
+
+div.bets, table.table {
+    border-radius: 20px;
+}
+
+td.divider {
+    background-color: rgb(230,234,237);
+    border-left: 0px;
+    border-right: 0px;
+}
+
+table {
+    margin-top: 10px;
+    background-color: grey;
+    background: rgba(76, 175, 80, 0)
+}
+
+td, th {
+    /* border: 1px solid black; */
+    margin: 0px;
+    padding-top: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+table td.odds, table th.odds {
+    padding: 5px;
+}
+
+table th.odds {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* table.table td, table.table th {
+    padding: 0px;
+} */
+
+table td.divider {
+    padding: 15px;
 }

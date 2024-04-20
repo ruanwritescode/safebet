@@ -1,19 +1,20 @@
-<div class="container" id="form">
-    <h1>Login</h1>
-    <form action="/login" type='submit' method="POST">
-    <div>
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="text" id="password" name="password" required>
-    </div>
-    <div>
-        <button type="submit" id="submit-button">Login</button>
-    </div>
-    </form>
-    <div>
-        <p>Don't have an account? <a href="/register">Create Account</a></p>
+<div class="container jumbotron mt-5 p-3 d-flex col-5 justify-content-center" id="form">
+    <div class="col-8">
+        <h1 class="text-center">Login</h1>
+        <form action="/login" type='submit' method="POST">
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <div class="d-flex justify-content-center">
+                <button class="login" type="submit" id="submit-button">Login</button>
+            </div>
+        </form>
+        <div class="d-flex justify-content-center">
+            <p>Don't have an account? <a href="/register">Create Account</a></p>
+        </div>
     </div>
 </div>
