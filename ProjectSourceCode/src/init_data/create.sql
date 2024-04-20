@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(24) NOT NULL,
     birth_date DATE NOT NULL,
     register_date DATE
-    -- PRIMARY KEY (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS sports (
