@@ -314,11 +314,9 @@ app.get('/home', async (req,res) => {
   // block used to pull options for selecting which bets to view. uses current database state.
   try  {
     options.sportsbooks = await db.many(sportsbook_query);
-    options.deals = await db.many(deal_query);
     options.sports = await db.many(sport_query);
     res.render('pages/home', {
       sportsbook: options.sportsbooks,
-      deal: options.deals,
       sport: options.sports,
       message: req.query.message,
       selection: selection,
@@ -396,9 +394,11 @@ app.post('/home/odds', async (req, res) => {
     // The ALGORITHM
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
+      event.valid = undefined;
       for (let j = 0; j < event.bookmakers.length; j++) {
         const bookmaker = event.bookmakers[j];
         if(bookmaker.title == selection.sportsbook.sportsbook_name) {
+          event.valid = 1;
           if(bookmaker.markets[0].outcomes[0].price > 0 && bookmaker.markets[0].outcomes[1].price < 0) {
             event.p = bookmaker.markets[0].outcomes[0].price;
             bookmaker.bet_team = 'a'
@@ -412,26 +412,22 @@ app.post('/home/odds', async (req, res) => {
             bookmaker.home = 'btn btn-outline-danger disabled'
           }
           else {
-            bookmaker.valid = 0;
             bookmaker.home = 'btn btn-outline-secondary disabled'
             bookmaker.away = 'btn btn-outline-secondary disabled'
           }
-          bookmaker.bet = event.p;
         }
       }
-      console.log(event.p);
       for (let j = 0; j < event.bookmakers.length; j++) {
         const bookmaker = event.bookmakers[j];
-        let n = undefined;
         if((bookmaker.title != selection.sportsbook.sportsbook_name)) {
-          if(bookmaker.markets[0].outcomes[0].price < 0 && bookmaker.markets[0].outcomes[1].price > 0) {
-            n = bookmaker.markets[0].outcomes[0].price;
+          if(event.valid && bookmaker.markets[0].outcomes[0].price < 0 && bookmaker.markets[0].outcomes[1].price > 0) {
+            bookmaker.n = bookmaker.markets[0].outcomes[0].price;
             bookmaker.bet_team = 'a'
             bookmaker.home = 'btn btn-danger'
             bookmaker.away = 'btn btn-outline-success disabled'
           }
-          else if(bookmaker.markets[0].outcomes[1].price < 0 && bookmaker.markets[0].outcomes[0].price > 0) {
-            n = bookmaker.markets[0].outcomes[1].price;
+          else if(event.valid && bookmaker.markets[0].outcomes[1].price < 0 && bookmaker.markets[0].outcomes[0].price > 0) {
+            bookmaker.n = bookmaker.markets[0].outcomes[1].price;
             bookmaker.bet_team = 'b'
             bookmaker.away = 'btn btn-danger'
             bookmaker.home = 'btn btn-outline-success disabled'
@@ -441,10 +437,9 @@ app.post('/home/odds', async (req, res) => {
             bookmaker.home = 'btn btn-outline-secondary disabled'
             bookmaker.away = 'btn btn-outline-secondary disabled'
           }
-          bookmaker.bet = n;
           let u = selection.bet_amount;
           let p = event.p;
-          n = Math.abs(n)
+          let n = Math.abs(bookmaker.n)
           bookmaker.hedge = ((u * p * n)/(100*(100+n))).toFixed(2);
           bookmaker.ratio = ((p)/(n + 100));
           bookmaker.winnings = (bookmaker.ratio * selection.bet_amount).toFixed(2);
@@ -471,7 +466,6 @@ app.post('/home/odds', async (req, res) => {
       }
       
     }
-    // console.log(events[0].statics);
 
     res.render('pages/home', {
       event: events,
@@ -491,32 +485,45 @@ app.post('/home/odds', async (req, res) => {
 // ------------------- ROUTES for saving bets ------------------- //
 app.post('/bets/add', async (req, res) => {
   const check_event = 'SELECT * FROM events WHERE event_id = $1';
-  const new_event = `INSERT INTO events (event_id, sport_id, team_f, team_n, event_date) VALUES ($1,$5,$2,$3,$4)`;
-  // const update_event = `UPDATE events SET team_f = $2, team_n = $3, event_date = $4 WHERE event_id = $1`;
+  const new_event = `INSERT INTO events (event_id, sport_id, team_f, team_n, event_date) VALUES ($1,$2,$3,$4,$5)`;
 
   const check_bet = 'SELECT * FROM bets WHERE user_id = $1 AND event_id = $2 AND deal_id = $3 AND hedge_id = $4 ';
   const new_bet = `INSERT INTO bets (user_id, event_id, deal_id, hedge_id, winnings) VALUES ($1,$2,$3,$4,$5)`;
-  // const update_bet = `UPDATE bets SET odds_f = $4, odds_n = $5, bet_team = $6, deal_id = $7, bet_value = $8 WHERE sportsbook_id = $2 AND event_id = $3 AND user_id = $1`;
 
-  const check_deal = 'SELECT deal_id FROM deals WHERE sportsbook_id = $1 AND deal_type = $2 AND deal_amount = $3 AND deal_line = $4'
+  const check_deal = 'SELECT * FROM deals WHERE sportsbook_id = $1 AND deal_type = $2 AND deal_amount = $3 AND deal_line = $4'
   const new_deal = 'INSERT INTO deals (sportsbook_id, deal_type, deal_amount, deal_line) VALUES ($1,$2,$3,$4)'
 
-  const check_hedge = 'SELECT hedge_id FROM hedges WHERE sportsbook_id = $1 AND hedge_amount = $2 AND hedge_line = $3'
+  const check_hedge = 'SELECT * FROM hedges WHERE sportsbook_id = $1 AND hedge_amount = $2 AND hedge_line = $3'
   const new_hedge = 'INSERT INTO hedges (sportsbook_id, hedge_amount, hedge_line) VALUES ($1,$2,$3)'
 
-  let query_event = '';
-  let query_bet = '';
+  // Variables required to insert new event
   const event_id = req.body.event_id;  
-  const event_date = req.body.time;
-  const bet_amount = req.body.bet_amount;
-  const deal_id = req.body.deal_id;
-  const hedge_id = req.body.hedge_id;
-  let sb_deal_id = req.body.sb_deal_id;
-  let sb_hedge_id = req.body.sb_hedge_id;
-
+  let sport_id = selection.sport.sport_id
   let team_f = undefined;
   let team_n = undefined;
-  let bet_team = undefined;
+  const event_date = req.body.time;
+
+  // Variables required to insert new deal
+  const sb_deal_id = req.body.sb_deal_id;
+  const deal_type = req.body.deal_type;
+  const deal_amount = req.body.deal_amount;
+  const deal_line = req.body.deal_line;
+
+  // Variables required to insert new hedge
+  let sb_hedge_name = req.body.sb_hedge_name;
+  const hedge_amount = req.body.hedge_amount;
+  const hedge_line = req.body.hedge_line;
+
+  // Variable required to make new bet
+  // user_id
+  // event_id
+  // deal_id
+  // hedge_id
+  // winnings
+  let user_id = user.user_id;
+  const winnings = req.body.winnings;
+
+  // Check for which team is favored and which team is underdog
   if(req.body.odds_a < 0){
     team_f = req.body.team_a;
     team_n = req.body.team_b;
@@ -527,6 +534,7 @@ app.post('/bets/add', async (req, res) => {
   }
 
   try {
+    // First check if api recieved any data. Throw error if not
     if(!req.body) {
       message = 'Error: No Data Found';
       throw new Error(message);
@@ -537,21 +545,39 @@ app.post('/bets/add', async (req, res) => {
     if(!exists_event[0]) {
       await db.none(new_event,[event_id,sport_id,team_f,team_n,event_date])
     }
-    let exists_deal = await db.any(check_deal, [sb_deal_id,deal_id])
-    let exists_bet = await db.any(check_bet,[user.user_id,event_id,deal_id,hedge_id]);
 
-    if(exists_bet[0]) {
-      query_bet = update_bet;
-      message = "This Bet Already Exists In Your History and Has Been Updated With Current Odds";
+    // Check if deal entry already exists in database. Add if not.
+    let deal_vars = [sb_deal_id, deal_type, deal_amount, deal_line];
+    let deal = await db.any(check_deal, deal_vars);
+    if(!deal[0]) {
+      await db.none(new_deal,deal_vars);
+      deal = await db.one(check_deal, deal_vars);
     }
     else {
-      query_bet = new_bet;
-      message = "Saved Bet To User History";
+      deal = deal[0];
     }
 
-    await db.none(query_event, [event_id,team_f,team_n,event_date,selection.sport.sport_id,user.user_id]);
-    await db.none(query_bet, [user.user_id,sb_id,event_id,odds_f,odds_n,bet_team,deal_id,bet_amount]);
-
+    // Check if hedge entry exists in database. Add if not.
+    let sb_hedge = await db.one('SELECT * FROM sportsbooks WHERE sportsbook_name = $1',[sb_hedge_name])
+    let hedge_vars = [sb_hedge.sportsbook_id, hedge_amount, hedge_line];
+    let hedge = await db.any(check_hedge, hedge_vars);
+    if(!hedge[0]) {
+      await db.none(new_hedge,hedge_vars);
+      hedge = await db.one(check_hedge, hedge_vars);
+    }
+    else {
+      hedge = hedge[0];
+    }
+    console.log(deal);
+    console.log(hedge);
+    // Check if bet entry already exists, error if not
+    let exists_bet = await db.any(check_bet,[user.user_id,event_id,deal.deal_id,hedge.hedge_id]);
+    if(exists_bet[0]) {
+      message = "This Bet Already Exists In Your History";
+      throw new Error(message);
+    }
+    await db.none(new_bet, [user_id,event_id,deal.deal_id,hedge.hedge_id,winnings]);
+    message = "Bet Added To User History"
     res.render('pages/home', {
       event: events,
       selection: selection,
@@ -579,15 +605,26 @@ app.post('/bets/add', async (req, res) => {
 // ------------------- ROUTES for profile.hbs ------------------- //
 // GET
 app.get('/profile', async (req, res) => {
-  const user_hist_query = 'SELECT * FROM bets b INNER JOIN sportsbooks sb ON sb.sportsbook_id = b.sportsbook_id INNER JOIN events e ON e.event_id = b.event_id INNER JOIN sports s ON s.sport_id = e.sport_id WHERE b.user_id = $1'
+  const bets_query = 'SELECT * FROM bets WHERE user_id = $1'
+  const events_query = 'SELECT * FROM events e INNER JOIN sports s ON s.sport_id = e.sport_id WHERE event_id = $1'
+  const deals_query = 'SELECT * FROM deals d INNER JOIN sportsbooks s ON s.sportsbook_id = d.sportsbook_id WHERE d.deal_id = $1';
+  const hedges_query = 'SELECT * FROM hedges h INNER JOIN sportsbooks s ON s.sportsbook_id = h.sportsbook_id WHERE h.hedge_id = $1';
+
   try {
-    userHist = await db.any(user_hist_query,[user.user_id]);
+    history = await db.any(bets_query,[user.user_id]);
+    for (let i = 0; i < history.length; i++) {
+      const bet = history[i];
+      bet.event = await db.one(events_query,[bet.event_id]);
+      bet.deal = await db.one(deals_query,[bet.deal_id]);
+      bet.hedge = await db.one(hedges_query,[bet.hedge_id]);
+    }
     res.render('pages/profile', {
       user: user,
-      history: userHist,
+      history: history,
     })
   }
   catch (error) {
+    console.log(error);
     message = "Could Not Load User History"
     res.render('pages/profile', {
       message: message,

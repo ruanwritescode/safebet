@@ -24,25 +24,57 @@
         
 </div>
 
-<div class="container">
+<div class="container jumbotron">
     <h2>Bet History</h2>
-    <table class="table">
+    <table class="table history table-striped">
         <tr>
             <th>League</th>
-            <th>Sportsbook</th>
             <th>Game</th>
-            <th>Winner</th>
-            <th>Bet Amount</th>
-            <th>Earnings</th>
+            <th>Free Bet</th>
+            <th>Hedged Bet</th>
+            <th>Game Winner</th>
+            <th>Calculated Winnings</th>
+        </tr>
+        <tr>
+            <td colspan="6" class="bar"></td>
         </tr>
         {{#each history}}
         <tr>
-            <td>{{sport_league}}</td>
-            <td>{{sportsbook_name}}</td>
-            <td>{{team_f}} vs {{team_n}} on {{event_date}}</td>
-            <td>{{#when outome 'eq' 'f'}}{{team_f}}{{/when}}{{#when outcome 'eq' 'n'}}{{team_n}}{{/when}}{{#when outcome 'eq' '0'}}N/A{{/when}}</td>
-            <td>{{bet_amount}}</td>
-            <td>{{winnings}}</td>
+            <td rowspan="3">{{event.sport_league}}</td>
+            <td>{{event.team_n}}</td>
+            <td class="odds">
+                <button type="submit" class='odds btn btn-success disabled'>
+                    +{{deal.deal_line}}
+                </button>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="">
+            <td>vs</td>
+            <td>${{deal.deal_amount}}</td>
+            <td>${{hedge.hedge_amount}}</td>
+            <td>{{#when event.outcome 'eq' 'f'}}{{event.team_f}}{{/when}}{{#when event.outcome 'eq' 'n'}}{{event.team_n}}{{/when}}</td>
+            <td class="odds">
+                <button type="submit" class='odds btn btn-outline-success disabled'>
+                    +{{winnings}}
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>{{event.team_f}}</td>
+            <td></td>
+            <td class="odds">
+                <button type="submit" class='odds btn btn-danger disabled'>
+                    {{hedge.hedge_line}}
+                </button>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="6" class="bar"></td>
         </tr>
         {{/each}}
     </table>

@@ -18,14 +18,10 @@ form input {
     border-radius: 5px;
 }
 form button {
-    /* width: 30%; */
-    /* padding: 8px; */
     background-color: #007bff; 
     color: white;
     border: none;
     border-radius: 10px;
-    /* cursor: pointer; */
-    /* margin-top: 5px; */
 }
 form button:hover {
     background-color: #0056b3;
@@ -47,26 +43,9 @@ form button:hover {
     height: auto;
 }
 
-button#odds {
-    width: 80px;
-    height: 40px;
-    text-align: center;
-    /* padding: 7px 0; */
-}
-
-/* div {
-    border: 1px solid grey;
-} */
-
 label {
     padding-bottom: 0px;
     margin-top: 8px;
-}
-
-button.login {
-    width: 150px;
-    margin-top: 15px;
-    margin-bottom: 10px;
 }
 
 div.bets-selector div{
@@ -79,16 +58,16 @@ div.bets, table.table {
     border-radius: 20px;
 }
 
-td.divider {
+/* td.divider {
     background-color: rgb(233,236,239);
     border-left: 0px;
     border-right: 0px;
     padding: 15px;
     height: 80px;
-}
+} */
 
 table td.space, table th.sportsbook {
-    background-color: rgb(233,236,239);
+    /* background-color: rgb(233,236,239); */
     border-top:0px;
     border-bottom:0px;
 }
@@ -116,24 +95,57 @@ table th.sportsbook {
     vertical-align: middle;
 }
 
-th.sportsbook button {
-    width: 120px;
-    height: 40px;
-    text-align: center;
-    margin-top:0px;
-    margin-bottom:0px;
+span.label {
+    font-weight: bold;
 }
 
-td.options {
-    background-color: rgb(243,246,249);
+table.history td {
+    border: 0px;
+    vertical-align: middle;
+    padding:2px;
 }
+
+table.history th {
+    text-align: center;
+}
+
+table.history td.bar {
+    height:10px;
+    background-color: grey;
+}
+
+/* Buttons */
+button.login {
+    width: 150px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
 button.select {
     padding:0px;
-    width:120px;
+    width:100px;
     height:25px;
     margin-top:5px;
 }
 
-span.label {
-    font-weight: bold;
+td.odds button {
+    width: 100px;
+    padding-top:0px;
+    padding-bottom:0px;
+}
+
+th.sportsbook button {
+    width: 120px;
+    text-align: center;
+    margin-top:3px;
+    margin-bottom:3px;
+    margin-left:15px;
+    margin-right:15px;
+}
+
+button#odds {
+    width: 80px;
+    height: 40px;
+    text-align: center;
+    /* padding: 7px 0; */
 }
