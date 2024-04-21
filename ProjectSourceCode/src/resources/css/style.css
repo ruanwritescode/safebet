@@ -114,6 +114,10 @@ table.history td.bar {
     background-color: grey;
 }
 
+table th.identifier {
+    text-align: right;
+}
+
 /* Buttons */
 button.login {
     width: 150px;
@@ -123,13 +127,13 @@ button.login {
 
 button.select {
     padding:0px;
-    width:100px;
+    width:120px;
     height:25px;
     margin-top:5px;
 }
 
-td.odds button {
-    width: 100px;
+td.odds button, td.odds a {
+    width: 120px;
     padding-top:0px;
     padding-bottom:0px;
 }

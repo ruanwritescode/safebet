@@ -399,6 +399,7 @@ app.post('/home/odds', async (req, res) => {
         const bookmaker = event.bookmakers[j];
         if(bookmaker.title == selection.sportsbook.sportsbook_name) {
           event.valid = 1;
+          bookmaker.valid = 1;
           if(bookmaker.markets[0].outcomes[0].price > 0 && bookmaker.markets[0].outcomes[1].price < 0) {
             event.p = bookmaker.markets[0].outcomes[0].price;
             bookmaker.bet_team = 'a'
@@ -412,6 +413,7 @@ app.post('/home/odds', async (req, res) => {
             bookmaker.home = 'btn btn-outline-danger disabled'
           }
           else {
+            bookmaker.valid = 0;
             bookmaker.home = 'btn btn-outline-secondary disabled'
             bookmaker.away = 'btn btn-outline-secondary disabled'
           }
@@ -420,6 +422,7 @@ app.post('/home/odds', async (req, res) => {
       for (let j = 0; j < event.bookmakers.length; j++) {
         const bookmaker = event.bookmakers[j];
         if((bookmaker.title != selection.sportsbook.sportsbook_name)) {
+          bookmaker.valid = 1;
           if(event.valid && bookmaker.markets[0].outcomes[0].price < 0 && bookmaker.markets[0].outcomes[1].price > 0) {
             bookmaker.n = bookmaker.markets[0].outcomes[0].price;
             bookmaker.bet_team = 'a'

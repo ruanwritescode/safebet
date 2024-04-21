@@ -50,7 +50,7 @@
         <table class="table history table-striped">
                 {{!-- Selected Sportsbook Row --}}
                 <tr class="">
-                    <th class="sportsbook">Selected Sportsbook:</th>
+                    <th colspan="2" class="sportsbook">Selected Sportsbook:</th>
                     {{#each sportsbook}}
                     <th class="sportsbook odds">
                         <form action="/home/odds" type='submit' method="POST">
@@ -64,12 +64,13 @@
                     {{/each}}
                 </tr>
                 <tr>
-                    <td colspan="8" class="bar"></td>
+                    <td colspan="9" class="bar"></td>
                 </tr>
                 {{!-- Event Rows --}}
             {{#each event}}
                 <tr>
                     <th class="odds"></th>
+                    <th></th>
                     {{#each statics}}
                     <td class="odds">
                         {{#if key}}
@@ -81,18 +82,19 @@
                     {{/each}}
                 </tr>
                 <tr>
-                    <td class="options align-middle"><span class="lable">{{home_team}}</span><br>vs.<br><span class="lable">{{away_team}}</span></td>
+                    <td class="options align-middle"><span class="label">{{home_team}}</span><br>vs.<br><span class="label">{{away_team}}</span></td>
+                    <th class="identifier">Hedge Bets:<br><br>Winnings:</th>
                     {{#each ../sportsbook}}
                         <td class="options ml-2 mr-2 align-middle">
-                        {{#each ../bookmakers}}
+                        {{#each ../statics}}
                             {{#when title 'eq' ../sportsbook_name}}
                             {{!-- <div class="highlight align-middle"> --}}
-                                {{#when valid 'noteq' 0}}
+                                {{#when valid 'eq' 1}}
                                     {{#when title 'eq' ../../../selection.sportsbook.sportsbook_name}}
                                         <span class="label">Free Bet</span><br>
                                         ${{../../../selection.bet_amount}} <br>
                                     {{else}}
-                                    <span class="label">Hedge:</span> ${{hedge}} <br>
+                                    ${{hedge}} <br>
                                     <form action="/bets/add" type="submit" method="POST">
                                         <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../../id}}'>
                                         <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../../home_team}}'>
@@ -114,7 +116,7 @@
                                             Select
                                         </button>
                                     </form>
-                                    <span class="label">Winnings:</span> ${{winnings}}
+                                    ${{winnings}}
                                     {{/when}}
                                 {{else}}
                                     N/A
@@ -128,6 +130,7 @@
                 </tr>
                 <tr>
                     <th class="odds"></th>
+                    <th></th>
                     {{#each statics}}
                     <td class="odds">
                         {{#if key}}

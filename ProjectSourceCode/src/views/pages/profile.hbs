@@ -47,7 +47,11 @@
                     +{{deal.deal_line}}
                 </button>
             </td>
-            <td></td>
+            <td class="odds">
+                <a href='{{hedge.sportsbook_url}}' type="submit" class='odds btn btn-outline-danger'>
+                    {{hedge.sportsbook_name}}
+                </a>
+            </td>
             <td></td>
             <td></td>
         </tr>
@@ -64,7 +68,11 @@
         </tr>
         <tr>
             <td>{{event.team_f}}</td>
-            <td></td>
+            <td class="odds">
+                <a href='{{deal.sportsbook_url}}' type="submit" class='odds btn btn-outline-success'>
+                    {{deal.sportsbook_name}}
+                </a>
+            </td>
             <td class="odds">
                 <button type="submit" class='odds btn btn-danger disabled'>
                     {{hedge.hedge_line}}
