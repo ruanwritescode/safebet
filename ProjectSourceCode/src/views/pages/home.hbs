@@ -139,15 +139,15 @@
                             ${{hedge}} <br>
                             ${{winnings}} <br>
                             <form action="/bets/add" type="submit" method="POST">
-                                <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../../id}}'>
-                                <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../../home_team}}'>
-                                <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../../away_team}}'>
-                                <input type="hidden" class="form-control" id="time" name="time" value='{{../../commence_time}}'>
+                                <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../id}}'>
+                                <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../home_team}}'>
+                                <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../away_team}}'>
+                                <input type="hidden" class="form-control" id="time" name="time" value='{{../commence_time}}'>
 
-                                <input type="hidden" class="form-control" id="sb_deal_id" name="sb_deal_id" value='{{../../../selection.sportsbook.sportsbook_id}}'>  
+                                <input type="hidden" class="form-control" id="sb_deal_id" name="sb_deal_id" value='{{../../selection.sportsbook.sportsbook_id}}'>  
                                 <input type="hidden" class="form-control" id="deal_type" name="deal_type" value='Free Bet'>                               
-                                <input type="hidden" class="form-control" id="deal_amount" name="deal_amount" value='{{../../../selection.bet_amount}}'>
-                                <input type="hidden" class="form-control" id="deal_line" name="deal_line" value='{{../../p}}'>
+                                <input type="hidden" class="form-control" id="deal_amount" name="deal_amount" value='{{../../selection.bet_amount}}'>
+                                <input type="hidden" class="form-control" id="deal_line" name="deal_line" value='{{../p}}'>
 
                                 <input type="hidden" class="form-control" id="sb_hedge_name" name="sb_hedge_name" value='{{title}}'>
                                 <input type="hidden" class="form-control" id="hedge_amount" name="hedge_amount" value='{{hedge}}'>
