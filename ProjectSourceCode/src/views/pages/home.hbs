@@ -50,17 +50,33 @@
         <table class="table history table-striped">
                 {{!-- Selected Sportsbook Row --}}
                 <tr class="">
-                    <th colspan="2" class="sportsbook">Selected Sportsbook:</th>
+                    <th colspan="1" class="sportsbook">Selected Sportsbook:</th>
                     {{#each sportsbook}}
+                    {{#when ../selection.sportsbook.sportsbook_name 'eq' sportsbook_name}}
+                        <th class="sportsbook odds">
+                            <form action="/home/odds" type='submit' method="POST">
+                                <input type="hidden" id="sportsbook" name="sportsbook" value={{sportsbook_id}}>
+                                <input type="hidden" id="sport" name="sport" value='{{../selection.sport.sport_id}}'>
+                                <input type="hidden" id="deal" name="deal" value='{{../selection.deal.deal_id}}'>
+                                <input type="hidden" id="bet_amount" name="bet_amount" value='{{../selection.bet_amount}}'>
+                                <button type="submit" id="submit-button"class="btn btn-secondary">{{sportsbook_name}}</button>
+                            </form>
+                        </th>
+                    {{/when}}
+                    {{/each}}
+                    <td></td>
+                    {{#each sportsbook}}
+                    {{#when ../selection.sportsbook.sportsbook_name 'noteq' sportsbook_name}}
                     <th class="sportsbook odds">
                         <form action="/home/odds" type='submit' method="POST">
                             <input type="hidden" id="sportsbook" name="sportsbook" value={{sportsbook_id}}>
                             <input type="hidden" id="sport" name="sport" value='{{../selection.sport.sport_id}}'>
                             <input type="hidden" id="deal" name="deal" value='{{../selection.deal.deal_id}}'>
                             <input type="hidden" id="bet_amount" name="bet_amount" value='{{../selection.bet_amount}}'>
-                            <button type="submit" id="submit-button"{{#when ../selection.sportsbook.sportsbook_name 'eq' sportsbook_name}}class="btn btn-secondary"{{else}}class="btn btn-outline-secondary"{{/when}}>{{sportsbook_name}}</button>
+                            <button type="submit" id="submit-button" class="btn btn-outline-secondary">{{sportsbook_name}}</button>
                         </form>
                     </th>
+                    {{/when}}
                     {{/each}}
                 </tr>
                 <tr>
@@ -70,8 +86,9 @@
             {{#each event}}
                 <tr>
                     <th class="odds"></th>
-                    <th></th>
+                    {{!-- Find and Display Currently Active Sportsbook Odds --}}
                     {{#each statics}}
+                    {{#when ../../selection.sportsbook.sportsbook_name 'eq' title}}
                     <td class="odds">
                         {{#if key}}
                             <button type="submit" class='{{home}} disabled'>
@@ -79,59 +96,81 @@
                             </button>
                         {{/if}}
                     </td>
+                    {{/when}}
+                    {{/each}}
+                    {{!-- Label Column --}}
+                    <td></td>
+                    {{!-- Display Non Active Sportsbooks Odds --}}
+                    {{#each statics}}
+                    {{#when ../../selection.sportsbook.sportsbook_name 'noteq' title}}
+                    <td class="odds">
+                        {{#if key}}
+                            <button type="submit" class='{{home}} disabled'>
+                                {{markets.[0].outcomes.[0].price}}
+                            </button>
+                        {{/if}}
+                    </td>
+                    {{/when}}
                     {{/each}}
                 </tr>
                 <tr>
                     <td class="options align-middle"><span class="label">{{home_team}}</span><br>vs.<br><span class="label">{{away_team}}</span></td>
-                    <th class="identifier">Hedge Bets:<br><br>Winnings:</th>
-                    {{#each ../sportsbook}}
-                        <td class="options ml-2 mr-2 align-middle">
-                        {{#each ../statics}}
-                            {{#when title 'eq' ../sportsbook_name}}
-                            {{!-- <div class="highlight align-middle"> --}}
-                                {{#when valid 'eq' 1}}
-                                    {{#when title 'eq' ../../../selection.sportsbook.sportsbook_name}}
-                                        <span class="label">Free Bet</span><br>
-                                        ${{../../../selection.bet_amount}} <br>
-                                    {{else}}
-                                    ${{hedge}} <br>
-                                    <form action="/bets/add" type="submit" method="POST">
-                                        <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../../id}}'>
-                                        <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../../home_team}}'>
-                                        <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../../away_team}}'>
-                                        <input type="hidden" class="form-control" id="time" name="time" value='{{../../commence_time}}'>
-
-                                        <input type="hidden" class="form-control" id="sb_deal_id" name="sb_deal_id" value='{{../../../selection.sportsbook.sportsbook_id}}'>  
-                                        <input type="hidden" class="form-control" id="deal_type" name="deal_type" value='Free Bet'>                               
-                                        <input type="hidden" class="form-control" id="deal_amount" name="deal_amount" value='{{../../../selection.bet_amount}}'>
-                                        <input type="hidden" class="form-control" id="deal_line" name="deal_line" value='{{../../p}}'>
-
-                                        <input type="hidden" class="form-control" id="sb_hedge_name" name="sb_hedge_name" value='{{title}}'>
-                                        <input type="hidden" class="form-control" id="hedge_amount" name="hedge_amount" value='{{hedge}}'>
-                                        <input type="hidden" class="form-control" id="hedge_line" name="hedge_line" value='{{n}}'>
-
-                                        <input type="hidden" class="form-control" id="winnings" name="winnings" value='{{winnings}}'>
-                                        
-                                        <button id="submit" type="submit" class="btn btn-info select m-1">
-                                            Select
-                                        </button>
-                                    </form>
-                                    ${{winnings}}
-                                    {{/when}}
-                                {{else}}
-                                    N/A
-                                {{/when}}
+                    {{#each statics}}
+                    {{#when ../../selection.sportsbook.sportsbook_name 'eq' title}}
+                            {{#when valid 'eq' 1}}
+                                <td class="options ml-2 mr-2 align-middle">
+                                <span class="label">Free Bet</span><br>
+                                ${{../../selection.bet_amount}} <br>
+                                </td>
+                                <th class="identifier">Hedge Bets:<br>Winnings:<br><br></th>
+                            {{else}}
+                                <td class="options ml-2 mr-2 align-middle">
+                                N/A
+                                </td>
+                                <th class="identifier"></th>
                             {{/when}}
-                            {{!-- </div> --}}
-                        {{/each}}
-                        
+                    {{/when}}
+                    {{/each}}
+                    
+                    {{#each statics}}
+                    {{#when ../../selection.sportsbook.sportsbook_name 'noteq' title}}
+                        <td class="options ml-2 mr-2 align-middle">
+                        {{#when valid 'eq' 1}}
+                            ${{hedge}} <br>
+                            ${{winnings}} <br>
+                            <form action="/bets/add" type="submit" method="POST">
+                                <input type="hidden" class="form-control" id="event_id" name="event_id" value='{{../../id}}'>
+                                <input type="hidden" class="form-control" id="team_a" name="team_a" value='{{../../home_team}}'>
+                                <input type="hidden" class="form-control" id="team_b" name="team_b" value='{{../../away_team}}'>
+                                <input type="hidden" class="form-control" id="time" name="time" value='{{../../commence_time}}'>
+
+                                <input type="hidden" class="form-control" id="sb_deal_id" name="sb_deal_id" value='{{../../../selection.sportsbook.sportsbook_id}}'>  
+                                <input type="hidden" class="form-control" id="deal_type" name="deal_type" value='Free Bet'>                               
+                                <input type="hidden" class="form-control" id="deal_amount" name="deal_amount" value='{{../../../selection.bet_amount}}'>
+                                <input type="hidden" class="form-control" id="deal_line" name="deal_line" value='{{../../p}}'>
+
+                                <input type="hidden" class="form-control" id="sb_hedge_name" name="sb_hedge_name" value='{{title}}'>
+                                <input type="hidden" class="form-control" id="hedge_amount" name="hedge_amount" value='{{hedge}}'>
+                                <input type="hidden" class="form-control" id="hedge_line" name="hedge_line" value='{{n}}'>
+
+                                <input type="hidden" class="form-control" id="winnings" name="winnings" value='{{winnings}}'>
+                                
+                                <button id="submit" type="submit" class="btn btn-dark select m-1">
+                                    Select
+                                </button>
+                            </form>
+                        {{else}}
+                            N/A
+                        {{/when}}
                         </td>
+                    {{/when}}
                     {{/each}}
                 </tr>
                 <tr>
                     <th class="odds"></th>
-                    <th></th>
+                    {{!-- Find and Display Currently Active Sportsbook Odds --}}
                     {{#each statics}}
+                    {{#when ../../selection.sportsbook.sportsbook_name 'eq' title}}
                     <td class="odds">
                         {{#if key}}
                             <button type="submit" class='{{away}} disabled'>
@@ -139,6 +178,21 @@
                             </button>
                         {{/if}}
                     </td>
+                    {{/when}}
+                    {{/each}}
+                    {{!-- Label Column --}}
+                    <td></td>
+                    {{!-- Display Non Active Sportsbooks Odds --}}
+                    {{#each statics}}
+                    {{#when ../../selection.sportsbook.sportsbook_name 'noteq' title}}
+                    <td class="odds">
+                        {{#if key}}
+                            <button type="submit" class='{{away}} disabled'>
+                                {{markets.[0].outcomes.[1].price}}
+                            </button>
+                        {{/if}}
+                    </td>
+                    {{/when}}
                     {{/each}}
                 </tr>
                 <tr class="">
