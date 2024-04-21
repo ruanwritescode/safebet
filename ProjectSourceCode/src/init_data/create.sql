@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(24) NOT NULL,
     birth_date DATE NOT NULL,
     register_date DATE
-    -- PRIMARY KEY (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS sports (
@@ -37,22 +36,30 @@ CREATE TABLE IF NOT EXISTS events (
 
 CREATE TABLE IF NOT EXISTS deals (
     deal_id SERIAL PRIMARY KEY,
-    deal_type VARCHAR(24) NOT NULL
+    sportsbook_id INT NOT NULL,
+    deal_type VARCHAR(24) NOT NULL,
+    deal_amount DECIMAL(15,2) NOT NULL,
+    deal_line INT NOT NULL,
+    FOREIGN KEY(sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
+);
+
+CREATE TABLE IF NOT EXISTS hedges (
+    hedge_id SERIAL PRIMARY KEY,
+    sportsbook_id INT NOT NULL,
+    hedge_amount DECIMAL(15,2) NOT NULL,
+    hedge_line INT NOT NULL,
+    FOREIGN KEY(sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
 );
 
 CREATE TABLE IF NOT EXISTS bets (
     bet_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    sportsbook_id INT NOT NULL,
     event_id VARCHAR(32) NOT NULL,
-    odds_f INT NOT NULL,
-    odds_n INT NOT NULL,
-    bet_team CHAR(1) NOT NULL,
-    deal_id INT,
-    bet_value DECIMAL(15,2),
+    deal_id INT NOT NULL,
+    hedge_id INT NOT NULL,
     winnings DECIMAL(15,2),
     FOREIGN KEY(user_id) REFERENCES users(user_id),
     FOREIGN KEY(event_id) REFERENCES events(event_id),
     FOREIGN KEY(deal_id) REFERENCES deals(deal_id),
-    FOREIGN KEY(sportsbook_id) REFERENCES sportsbooks(sportsbook_id)
+    FOREIGN KEY(hedge_id) REFERENCES hedges(hedge_id)
 );
