@@ -54,7 +54,13 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '/src/views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
-app.use(express.static(path.join(__dirname, '/src/resources')));
+//app.use(express.static(path.join(__dirname, '/src/resources')));
+// Images
+
+app.use(express.static(path.join(__dirname, 'src', 'resources')));
+
+// Use correct file paths for images
+const imgPathRuanAbarbanel = "/images/profile_pictures/ruan_Abarbanel.jpeg";
 
 // initialize session variables
 app.use(
