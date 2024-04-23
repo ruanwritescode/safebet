@@ -54,8 +54,13 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '/src/views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
-app.use(express.static(path.join(__dirname, '/src/resources')));
-app.use(express.static(path.join(__dirname, '/src/resources/images')));
+//app.use(express.static(path.join(__dirname, '/src/resources')));
+// Images
+
+app.use(express.static(path.join(__dirname, 'src', 'resources')));
+
+// Use correct file paths for images
+const imgPathRuanAbarbanel = "/images/profile_pictures/ruan_Abarbanel.jpeg";
 
 // initialize session variables
 app.use(
@@ -119,23 +124,31 @@ app.get('/', async (req, res) => {
 // GET
 app.get('/register', (req, res) => {
     res.render('pages/register', {
-      user: user,
+      user: req.session.user,
     })
 });
 // POST
 app.post('/register', async (req, res) => {
     //hash the password using bcrypt library
-    const hash = await bcrypt.hash(req.body.password, 10);
-    user.username = req.body.username;
-    user.first_name = req.body.first_name;
-    user.last_name = req.body.last_name;
-    user.email = req.body.email;
-    let birthday = new Date(req.body.birth_date);
-    user.birth_date = birthday;
-    const register_date = new Date().toJSON().slice(0, 10);
-    user.reg_date = new Date(register_date);
-    let age = user.reg_date.getFullYear() - birthday.getFullYear();
-    if (age< 21) {
+    let temp_user = {
+      username: undefined,
+      first_name: undefined,
+      email: undefined,
+      birth_date: undefined,
+      reg_date: undefined,
+    }
+    try {
+      const hash = await bcrypt.hash(req.body.password, 10);
+      temp_user.username = req.body.username;
+      temp_user.first_name = req.body.first_name;
+      temp_user.last_name = req.body.last_name;
+      temp_user.email = req.body.email;
+      let birthday = new Date(req.body.birth_date);
+      temp_user.birth_date = birthday;
+      const register_date = new Date().toJSON().slice(0, 10);
+      temp_user.reg_date = new Date(register_date);
+      let age = temp_user.reg_date.getFullYear() - birthday.getFullYear();
+      if (age< 21) {
         err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
         console.log(err);
         res.render('pages/register', {
@@ -144,10 +157,20 @@ app.post('/register', async (req, res) => {
           user: user,
         });
         return;
-    };
+      };
+    }
+    catch (error) {
+      err = "Could Not Resolve Input Data"
+      res.render('pages/register', {
+        error: true,
+        message: err,
+        user: user,
+      });
+      return;
+    }
     // To-DO: Insert username and hashed password into the 'users' table
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
-
+    user = temp_user;
     db.none(query, [
         user.username,
         hash,
@@ -155,7 +178,7 @@ app.post('/register', async (req, res) => {
         user.last_name,
         user.email,
         user.birth_date,
-        register_date
+        user.register_date
     ])
         .then(
             res.redirect('/login')

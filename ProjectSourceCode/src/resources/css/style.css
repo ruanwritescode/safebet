@@ -1,5 +1,9 @@
 body, html {
     font-family: Arial;
+    margin-top:60px;
+}
+nav {
+    background-color: rgb(121,194,136);
 }
 main {
     display: flex;
@@ -10,7 +14,10 @@ form > div {
     width: 100%;
     margin-bottom: 5px;
 }
-form input {
+div.form {
+    padding:0px;
+}
+form input, input.number {
     width: 100%;
     padding: 6px;
     /* margin-top: 5px; */
@@ -48,14 +55,15 @@ label {
     margin-top: 8px;
 }
 
-div.bets-selector div{
-    text-align: end;
-    align-content: start;
+table.bet-selector th, table.bet-selector td {
+    text-align: center;
     /* padding-top: 20px; */
+    background-color: rgb(233,236,239);
+    border:none;
 }
 
-div.bets, table.table {
-    border-radius: 20px;
+table.bet-selector {
+    width:100%;
 }
 
 /* td.divider {
@@ -78,10 +86,6 @@ td, th {
     padding-top: 0px;
     padding: 0px;
     text-align: center;
-}
-
-table td.odds, table th.odds {
-    padding: 5px;
 }
 
 table th.odds {
@@ -110,8 +114,8 @@ table.history th {
 }
 
 table.history td.bar {
-    height:10px;
-    background-color: grey;
+    height:30px;
+    background-color: rgb(233,236,239);
 }
 
 table th.identifier {
