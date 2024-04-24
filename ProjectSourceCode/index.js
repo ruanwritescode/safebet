@@ -137,37 +137,26 @@ app.post('/register', async (req, res) => {
       birth_date: undefined,
       reg_date: undefined,
     }
-    try {
-      const hash = await bcrypt.hash(req.body.password, 10);
-      temp_user.username = req.body.username;
-      temp_user.first_name = req.body.first_name;
-      temp_user.last_name = req.body.last_name;
-      temp_user.email = req.body.email;
-      let birthday = new Date(req.body.birth_date);
-      temp_user.birth_date = birthday;
-      const register_date = new Date().toJSON().slice(0, 10);
-      temp_user.reg_date = new Date(register_date);
-      let age = temp_user.reg_date.getFullYear() - birthday.getFullYear();
-      if (age< 21) {
-        err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
-        console.log(err);
-        res.render('pages/register', {
-          error: true,
-          message: err,
-          user: temp_user,
-        });
-        return;
-      };
-    }
-    catch (error) {
-      err = "Could Not Resolve Input Data"
+    const hash = await bcrypt.hash(req.body.password, 10);
+    temp_user.username = req.body.username;
+    temp_user.first_name = req.body.first_name;
+    temp_user.last_name = req.body.last_name;
+    temp_user.email = req.body.email;
+    let birthday = new Date(req.body.birth_date);
+    temp_user.birth_date = birthday;
+    const register_date = new Date().toJSON().slice(0, 10);
+    temp_user.reg_date = new Date(register_date);
+    let age = temp_user.reg_date.getFullYear() - birthday.getFullYear();
+    if (age< 21) {
+      err = `Sorry, you are not old enough to gamble so according to state law we cannot allow you to register`;
+      console.log(err);
       res.render('pages/register', {
         error: true,
         message: err,
-        user: user,
+        user: temp_user,
       });
       return;
-    }
+    };
     // To-DO: Insert username and hashed password into the 'users' table
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
     user.username = temp_user.username;
