@@ -3,7 +3,7 @@ body, html {
     margin-top:60px;
 }
 nav {
-    background-color: rgb(121,194,136);
+    background-color: rgb(40,168,69);
 }
 main {
     display: flex;
@@ -66,6 +66,10 @@ table.bet-selector th, table.bet-selector td {
 
 table.bet-selector {
     width:100%;
+}
+
+a.nav-link {
+    color:white;
 }
 
 /* td.divider {
