@@ -42,7 +42,9 @@ form button:hover {
     padding: 0;
 }
 .team-card {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-left:15px;
+    margin-right:15px;
 }
 
 .team-card img {
