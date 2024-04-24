@@ -63,14 +63,15 @@ table.bet-selector th, table.bet-selector td {
     background-color: rgb(233,236,239);
     border:none;
 }
-table.user-info th, table.user-info td {
+table.user-info td {
     background-color:rgb(233,236,239);
     text-align: left;
-}
-/* table.user-info {
     width:50%;
-    border: 1px solid black;
-} */
+}
+table.user-info th {
+    background-color:rgb(233,236,239);
+    text-align: right;
+}
 
 table.bet-selector {
     width:100%;
