@@ -63,6 +63,14 @@ table.bet-selector th, table.bet-selector td {
     background-color: rgb(233,236,239);
     border:none;
 }
+table.user-info th, table.user-info td {
+    background-color:rgb(233,236,239);
+    text-align: left;
+}
+/* table.user-info {
+    width:50%;
+    border: 1px solid black;
+} */
 
 table.bet-selector {
     width:100%;
@@ -71,14 +79,6 @@ table.bet-selector {
 a.nav-link {
     color:white;
 }
-
-/* td.divider {
-    background-color: rgb(233,236,239);
-    border-left: 0px;
-    border-right: 0px;
-    padding: 15px;
-    height: 80px;
-} */
 
 table td.space, table th.sportsbook {
     /* background-color: rgb(233,236,239); */
@@ -113,6 +113,10 @@ table.history td {
     border: 0px;
     vertical-align: middle;
     padding:2px;
+}
+
+table.user-info {
+    margin-top:0px;
 }
 
 table.history th {
