@@ -232,3 +232,67 @@ describe('Loading chatbot', () => {
     });
   });
 });
+
+// ********************** Unit Testcase: Profile Page *******************************
+// Positive test case: Data is displayed
+describe('Profile Page Display - Positive Test', () => {
+  it('Displays user profile and betting history', done => {
+    chai.request(server)
+      .get('/profile') 
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.text).to.include('First Name');
+        expect(res.text).to.include('Last Name');
+        expect(res.text).to.include('Username');
+        expect(res.text).to.include('Email');
+        expect(res.text).to.include('Register Date');
+        expect(res.text).to.include('+300');
+        expect(res.text).to.include('NBA');
+        expect(res.text).to.include('Lakers vs Nuggets');
+        done();
+      });
+   });
+});
+
+// Negative test case: User with no/betting betting history
+describe('Profile Page Display - Negative Test', () => {
+  it('Handles empty betting history correctly', done => {
+    chai.request(server)
+      .get('/profile') 
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.text).to.include('First Name');
+        expect(res.text).to.include('No betting history available'); 
+        done();
+      });
+   });
+});
+
+// ********************** Unit Testcase: Login Testing *******************************
+// Positive test case: Valid login in database
+describe('Login functionality', () => {
+  it('Successfully logs in with valid login username and password', done => {
+    chai.request(server)
+      .post('/login')
+      .send({ username: 'admin', password: 'admin' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.text).to.include('Successfully logged in'); 
+        done();
+      });
+  });
+});
+
+// Negative test case: Invalid login not stored in database
+describe('Login functionality', () => {
+  it('Unsuccessful login with wrong username and password', done => {
+    chai.request(server)
+      .post('/login')
+      .send({ username: 'ADMIN', password: 'ADMIN' }) 
+      .end((err, res) => {
+        expect(res).to.have.status(401); 
+        expect(res.text).to.include('Invalid username or password'); 
+        done();
+      });
+  });
+});
