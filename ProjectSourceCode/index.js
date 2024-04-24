@@ -154,7 +154,7 @@ app.post('/register', async (req, res) => {
         res.render('pages/register', {
           error: true,
           message: err,
-          user: user,
+          user: temp_user,
         });
         return;
       };
@@ -170,7 +170,12 @@ app.post('/register', async (req, res) => {
     }
     // To-DO: Insert username and hashed password into the 'users' table
     const query = 'INSERT INTO users(username, password, first_name, last_name, email, birth_date, register_date) VALUES ($1, $2, $3, $4, $5, $6, $7);'
-    user = temp_user;
+    user.username = temp_user.username;
+    user.first_name = temp_user.first_name;
+    user.last_name = temp_user.last_name;
+    user.email = temp_user.email;
+    user.birth_date = temp_user.birth_date;
+    user.register_date = temp_user.reg_date;
     db.none(query, [
         user.username,
         hash,
