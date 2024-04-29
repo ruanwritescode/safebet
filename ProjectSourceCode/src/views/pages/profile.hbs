@@ -1,31 +1,35 @@
-<div class="container">
-    <table>
+{{!-- <div class="container">
+    
+        
+</div> --}}
+
+<div class="container jumbotron mt-5 justify-content-center pt-6">
+    <h2 class="display-4 text-center">User Information</h2>
+    <div class="user-info col-12 justify-content-center">
+    <table class="table user-info w-100">
         <tr>
-            <th>FIRST NAME</th>
+            <th>FIRST NAME:</th>
             <td>{{user.first_name}}</td>
         </tr>
         <tr>
-            <th>LAST NAME</th>
+            <th>LAST NAME:</th>
             <td>{{user.last_name}}</td>
         </tr>
         <tr>
-            <th>USER NAME</th>
+            <th>USER NAME:</th>
             <td>{{user.username}}</td>
         </tr>
         <tr>
-            <th>EMAIL</th>
+            <th>EMAIL:</th>
             <td>{{user.email}}</td>
         </tr>
         <tr>
-            <th>REGISTER DATE</th>
+            <th>REGISTER DATE:</th>
             <td>{{user.register_date}}</td>
         </tr>
     </table>
-        
-</div>
-
-<div class="container jumbotron">
-    <h2>Bet History</h2>
+    </div>
+    <h2 class="display-4 text-center">Bet History</h2>
     <table class="table history table-striped">
         <tr>
             <th>League</th>

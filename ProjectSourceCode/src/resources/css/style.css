@@ -3,7 +3,7 @@ body, html {
     margin-top:60px;
 }
 nav {
-    background-color: rgb(121,194,136);
+    background-color: rgb(40,168,69);
 }
 main {
     display: flex;
@@ -42,7 +42,9 @@ form button:hover {
     padding: 0;
 }
 .team-card {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-left:15px;
+    margin-right:15px;
 }
 
 .team-card img {
@@ -61,18 +63,23 @@ table.bet-selector th, table.bet-selector td {
     background-color: rgb(233,236,239);
     border:none;
 }
+table.user-info td {
+    background-color:rgb(233,236,239);
+    text-align: left;
+    width:50%;
+}
+table.user-info th {
+    background-color:rgb(233,236,239);
+    text-align: right;
+}
 
 table.bet-selector {
     width:100%;
 }
 
-/* td.divider {
-    background-color: rgb(233,236,239);
-    border-left: 0px;
-    border-right: 0px;
-    padding: 15px;
-    height: 80px;
-} */
+a.nav-link {
+    color:white;
+}
 
 table td.space, table th.sportsbook {
     /* background-color: rgb(233,236,239); */
@@ -107,6 +114,10 @@ table.history td {
     border: 0px;
     vertical-align: middle;
     padding:2px;
+}
+
+table.user-info {
+    margin-top:0px;
 }
 
 table.history th {
