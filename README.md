@@ -18,4 +18,4 @@ Step one of setting up the app once the repository is downloaded as well as Dock
 
 To run a test on the program you must once the site is running with the above command. Go to a browser of your choice and type in the browser head [http://localhost:3000](http://localhost:3000)
 
-Here is the fully built app - [(http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/register](http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/home/odds)
+Here is the fully built app - [http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/register](http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/home/odds)
