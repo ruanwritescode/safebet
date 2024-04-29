@@ -8,14 +8,14 @@ Additional pages on the web app include login, register, welcome pages, an about
 Meet the team who developed this project: Ruan Abarbanel, Rohan Adepu, Joshua Gildred, Chasen Goren, Robiel Kennedy, Aaron Van.
 
 For this project we used this list of websites and services including:
-  [Docker](https://www.docker.com)
-  [The-Odds-API](https://the-odds-api.com)
-  [Microsfot Azure](https://azure.microsoft.com/en-us/)
+- [Docker](https://www.docker.com)
+- [The-Odds-API](https://the-odds-api.com)
+- [Microsfot Azure](https://azure.microsoft.com/en-us/)
   
 In order to run this app if the Azure site isn't up, you will need to download Docker as listed above and make sure you have virtualization enabled on your PC. 
 
 Step one of setting up the app once the repository is downloaded as well as Docker. Is to use this command while in `../ProjectSourceCode`, `docker-compose up -d`
 
-To run a test on the program you must once the site is running with the above command. Go to a browser of your choice and type in the browser head (http://localhost:3000)[http://localhost:3000]
+To run a test on the program you must once the site is running with the above command. Go to a browser of your choice and type in the browser head [http://localhost:3000](http://localhost:3000)
 
 Here is the fully built app - [(http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/register](http://recitation-010-team-01.eastus.cloudapp.azure.com:3000/home/odds)
