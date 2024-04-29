@@ -3,7 +3,8 @@ body, html {
     margin-top:60px;
 }
 nav {
-    background-color: rgb(40,168,69);
+    /* background-color: rgb(40,168,69); */
+    background-color: white;
 }
 main {
     display: flex;
@@ -78,7 +79,7 @@ table.bet-selector {
 }
 
 a.nav-link {
-    color:white;
+    /* color:white; */
 }
 
 table td.space, table th.sportsbook {
