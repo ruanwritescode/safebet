@@ -372,6 +372,10 @@ app.post('/home/odds', async (req, res) => {
     //   message = 'Sorry, functionality is only limited to Free Bets at the moment';
     //   throw new Error(message);
     // }
+    if(selection.bet_amount < 0) {
+      message = "Please Enter A Valid Bet Amount";
+      throw new Error(message);
+    }
   }
   catch (err) {
     res.render('pages/home', {
